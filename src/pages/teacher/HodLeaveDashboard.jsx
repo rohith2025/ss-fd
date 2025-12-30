@@ -3,18 +3,18 @@ import api from "../../api/axios";
 import DashboardLayout from "../../components/DashboardLayout";
 
 
-const ParentDashboard = () => {
+const HodLeaveDashboard = () => {
   const [leaves, setLeaves] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch parent-specific leaves
+  // Fetch HOD-specific pending leaves
   useEffect(() => {
     const fetchLeaves = async () => {
       try {
-        const res = await api.get("/leaves/parent");
+        const res = await api.get("/leaves/hod");
         setLeaves(res.data || []);
       } catch (err) {
-        console.error("Failed to load leave requests");
+        console.error("Failed to load HOD leave requests");
       } finally {
         setLoading(false);
       }
@@ -23,20 +23,15 @@ const ParentDashboard = () => {
     fetchLeaves();
   }, []);
 
-  // ✅ ONLY pending leaves
-  const pendingLeaves = leaves.filter(
-    (l) => l.parentStatus === "pending"
-  );
-
   const handleAction = async (leaveId, status) => {
     try {
-      await api.put(`/leaves/parent/${leaveId}`, { status });
+      await api.put(`/leaves/hod/${leaveId}`, { status });
 
-      // update UI after action
+      // update UI
       setLeaves((prev) =>
         prev.map((leave) =>
           leave._id === leaveId
-            ? { ...leave, parentStatus: status, finalStatus: status }
+            ? { ...leave, hodStatus: status, finalStatus: status }
             : leave
         )
       );
@@ -48,7 +43,7 @@ const ParentDashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-sky-50">
-        <p className="text-gray-600">Loading dashboard...</p>
+        <p className="text-gray-600">Loading leave requests...</p>
       </div>
     );
   }
@@ -58,10 +53,10 @@ const ParentDashboard = () => {
       {/* Navbar */}
       <div className="bg-white shadow-sm px-6 py-4">
         <h1 className="text-xl font-semibold text-gray-800">
-          Parent Dashboard
+          HOD Leave Approval
         </h1>
         <p className="text-sm text-gray-500">
-          Review and manage your child’s leave requests
+          Review parent-approved leave requests
         </p>
       </div>
 
@@ -72,18 +67,22 @@ const ParentDashboard = () => {
             Pending Leave Requests
           </h2>
 
-          {pendingLeaves.length === 0 ? (
+          {leaves.length === 0 ? (
             <p className="text-sm text-gray-500">
-              No pending leave requests !!
+              No pending approvals 🎉
             </p>
           ) : (
             <div className="space-y-4">
-              {pendingLeaves.map((leave) => (
+              {leaves.map((leave) => (
                 <div
                   key={leave._id}
                   className="border rounded-lg p-4 flex flex-col md:flex-row md:items-center md:justify-between"
                 >
                   <div>
+                    <p className="text-sm text-gray-700">
+                      <span className="font-medium">Student:</span>{" "}
+                      {leave.student?.name}
+                    </p>
                     <p className="text-sm text-gray-700">
                       <span className="font-medium">From:</span>{" "}
                       {new Date(leave.fromDate).toLocaleDateString()}
@@ -126,4 +125,4 @@ const ParentDashboard = () => {
   );
 };
 
-export default ParentDashboard;
+export default HodLeaveDashboard;
