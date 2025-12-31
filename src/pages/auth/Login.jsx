@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../api/auth.api";
 import { useAuth } from "../../context/AuthContext";
+import HomeNavbar from "../HomeNavbar";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -39,6 +40,8 @@ const Login = () => {
   };
 
   return (
+    <div>
+      <HomeNavbar></HomeNavbar>
     <div className="min-h-screen flex items-center justify-center bg-sky-50">
       <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-md">
         <h2 className="text-2xl font-semibold text-gray-800 text-center">
@@ -64,7 +67,6 @@ const Login = () => {
               value={form.email}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
-              placeholder="you@example.com"
             />
           </div>
 
@@ -77,7 +79,6 @@ const Login = () => {
               value={form.password}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
-              placeholder="••••••••"
             />
           </div>
 
@@ -97,6 +98,7 @@ const Login = () => {
           </Link>
         </p>
       </div>
+    </div>
     </div>
   );
 };

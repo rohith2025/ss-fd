@@ -1,86 +1,175 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import Home from "./pages/Home";
 
-// Auth
+/* ===================== AUTH ===================== */
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 
-// Dashboards
+/* ===================== STUDENT ===================== */
 import StudentDashboard from "./pages/student/StudentDashboard";
-import TeacherDashboard from "./pages/teacher/TeacherDashboard";
-import ParentDashboard from "./pages/parent/ParentDashboard";
-import AdminDashboard from "./pages/admin/AdminDashboard";
+import StudentAttendance from "./pages/student/StudentAttendance";
+import StudentExams from "./pages/student/StudentExams";
+import StudentFees from "./pages/student/StudentFees";
+import StudentLeaves from "./pages/student/StudentLeaves";
+import StudentActivities from "./pages/student/StudentActivities";
+import StudentThesis from "./pages/student/StudentThesis";
+import StudentTimetable from "./pages/student/StudentTimetable";
 
-// HOD Leave Page
+/* ===================== PARENT ===================== */
+import ParentDashboard from "./pages/parent/ParentDashboard";
+import ParentChildAttendance from "./pages/parent/ParentChildAttendance";
+
+/* ===================== TEACHER / HOD ===================== */
+import TeacherDashboard from "./pages/teacher/TeacherDashboard";
+import TeacherAttendance from "./pages/teacher/TeacherAttendance";
+import TeacherStudentThesis from "./pages/teacher/TeacherStudentThesis";
 import HodLeaveDashboard from "./pages/teacher/HodLeaveDashboard";
 
-// Route guard
-import ProtectedRoute from "./routes/ProtectedRoute";
+/* ===================== ADMIN ===================== */
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminUserLinking from "./pages/admin/AdminUserLinking";
+import AdminTransactions from "./pages/admin/AdminTransactions";
+import AdminFeesApproval from "./pages/admin/AdminFeesApproval";
+
+/* ===================== COMMON ===================== */
+import Holidays from "./pages/common/Holidays";
+import Notices from "./pages/common/Notices";
+import Notifications from "./pages/common/Notifications";
 
 const App = () => {
   return (
     <Routes>
-      {/* Public */}
+      {/* ========= PUBLIC ========= */}
+      <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
-      {/* Student */}
-      <Route
-        path="/student/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={["student"]}>
-            <StudentDashboard />
-          </ProtectedRoute>
-        }
-      />
+      {/* ========= STUDENT ========= */}
+      <Route path="/student/dashboard" element={
+        <ProtectedRoute allowedRoles={["student"]}>
+          <StudentDashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/student/attendance" element={
+        <ProtectedRoute allowedRoles={["student"]}>
+          <StudentAttendance />
+        </ProtectedRoute>
+      } />
+      <Route path="/student/exams" element={
+        <ProtectedRoute allowedRoles={["student"]}>
+          <StudentExams />
+        </ProtectedRoute>
+      } />
+      <Route path="/student/fees" element={
+        <ProtectedRoute allowedRoles={["student"]}>
+          <StudentFees />
+        </ProtectedRoute>
+      } />
+      <Route path="/student/leaves" element={
+        <ProtectedRoute allowedRoles={["student"]}>
+          <StudentLeaves />
+        </ProtectedRoute>
+      } />
+      <Route path="/student/activities" element={
+        <ProtectedRoute allowedRoles={["student"]}>
+          <StudentActivities />
+        </ProtectedRoute>
+      } />
+      <Route path="/student/thesis" element={
+        <ProtectedRoute allowedRoles={["student"]}>
+          <StudentThesis />
+        </ProtectedRoute>
+      } />
+      <Route path="/student/timetable" element={
+        <ProtectedRoute allowedRoles={["student"]}>
+          <StudentTimetable />
+        </ProtectedRoute>
+      } />
 
-      {/* Teacher / HOD / Exam Head / Lab Assistant */}
-      <Route
-        path="/teacher/dashboard"
-        element={
-          <ProtectedRoute
-            allowedRoles={["teacher", "hod", "exam_head", "lab_assistant"]}
-          >
-            <TeacherDashboard />
-          </ProtectedRoute>
-        }
-      />
+      {/* ========= PARENT ========= */}
+      <Route path="/parent/dashboard" element={
+        <ProtectedRoute allowedRoles={["parent"]}>
+          <ParentDashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/parent/attendance" element={
+        <ProtectedRoute allowedRoles={["parent"]}>
+          <ParentChildAttendance />
+        </ProtectedRoute>
+      } />
 
-      {/* HOD – Leave Approval */}
-      <Route
-        path="/hod/leaves"
-        element={
-          <ProtectedRoute allowedRoles={["hod"]}>
-            <HodLeaveDashboard />
-          </ProtectedRoute>
-        }
-      />
+      {/* ========= TEACHER / HOD / LAB / EXAM HEAD ========= */}
+      <Route path="/teacher/dashboard" element={
+        <ProtectedRoute allowedRoles={["teacher","hod","exam_head","lab_assistant"]}>
+          <TeacherDashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/teacher/attendance" element={
+        <ProtectedRoute allowedRoles={["teacher","hod"]}>
+          <TeacherAttendance />
+        </ProtectedRoute>
+      } />
+      <Route path="/teacher/thesis" element={
+        <ProtectedRoute allowedRoles={["teacher"]}>
+          <TeacherStudentThesis />
+        </ProtectedRoute>
+      } />
 
-      {/* Parent */}
-      <Route
-        path="/parent/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={["parent"]}>
-            <ParentDashboard />
-          </ProtectedRoute>
-        }
-      />
+      {/* ========= HOD ========= */}
+      <Route path="/hod/leaves" element={
+        <ProtectedRoute allowedRoles={["hod"]}>
+          <HodLeaveDashboard />
+        </ProtectedRoute>
+      } />
 
-      {/* Admin */}
-      <Route
-        path="/admin/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={["admin"]}>
-            <AdminDashboard />
-          </ProtectedRoute>
-        }
-      />
+      {/* ========= ADMIN ========= */}
+      <Route path="/admin/dashboard" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+          <AdminDashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/users" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+          <AdminUsers />
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/linking" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+          <AdminUserLinking />
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/transactions" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+          <AdminTransactions />
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/fees" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+          <AdminFeesApproval />
+        </ProtectedRoute>
+      } />
 
-      {/* Fallbacks */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route
-        path="/unauthorized"
-        element={<h1 className="p-8 text-red-600">Unauthorized</h1>}
-      />
+      {/* ========= COMMON ========= */}
+      <Route path="/holidays" element={
+        <ProtectedRoute allowedRoles={["admin","student","parent","teacher","hod","exam_head","lab_assistant"]}>
+          <Holidays />
+        </ProtectedRoute>
+      } />
+      <Route path="/notices" element={
+        <ProtectedRoute allowedRoles={["admin","student","parent","teacher","hod","exam_head","lab_assistant"]}>
+          <Notices />
+        </ProtectedRoute>
+      } />
+      <Route path="/notifications" element={
+        <ProtectedRoute allowedRoles={["admin","student","parent","teacher","hod","exam_head","lab_assistant"]}>
+          <Notifications />
+        </ProtectedRoute>
+      } />
+
+      {/* ========= FALLBACK ========= */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

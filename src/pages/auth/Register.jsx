@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { registerUser } from "../../api/auth.api";
+import HomeNavbar from "../HomeNavbar";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -39,6 +40,8 @@ const Register = () => {
   };
 
   return (
+    <div>
+      <HomeNavbar></HomeNavbar>
     <div className="min-h-screen flex items-center justify-center bg-sky-50">
       <div className="w-full max-w-lg bg-white p-8 rounded-xl shadow-md">
         <h2 className="text-2xl font-semibold text-gray-800 text-center">
@@ -153,6 +156,7 @@ const Register = () => {
           </Link>
         </p>
       </div>
+    </div>
     </div>
   );
 };
