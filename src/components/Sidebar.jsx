@@ -13,9 +13,6 @@ const Sidebar = () => {
 
   return (
     <aside className="w-64 bg-white shadow-sm min-h-screen p-4">
-      <h2 className="text-lg font-semibold text-sky-700 mb-6">
-        ShikshaSetu
-      </h2>
 
       {/* STUDENT */}
       {role === "student" && (

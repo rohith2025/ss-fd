@@ -31,7 +31,7 @@ const TeacherAttendance = () => {
   const handleMarkAttendance = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/attendance/mark", {
+      await api.post("/teacher/attendance", {
         studentId,
         subject,
         status,
@@ -70,7 +70,7 @@ const TeacherAttendance = () => {
           >
             <option value="">Select Student</option>
             {students.map((s) => (
-              <option key={s.studentName} value={s.studentId}>
+              <option key={s._id} value={s._id}>
                 {s.studentName}
               </option>
             ))}
