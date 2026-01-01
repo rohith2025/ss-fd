@@ -21,6 +21,16 @@ const StudentAttendance = () => {
     }
   };
 
+  // ✅ Date formatter (safe)
+  const formatDate = (dateValue) => {
+    if (!dateValue) return "N/A";
+    return new Date(dateValue).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   return (
     <DashboardLayout>
       <div className="bg-white rounded-xl shadow-sm p-6">
@@ -45,8 +55,15 @@ const StudentAttendance = () => {
                   <p className="text-gray-700 font-medium">
                     {item.subject}
                   </p>
+
+                  {/* ✅ Day + Time */}
                   <p className="text-sm text-gray-500">
                     {item.day} • {item.time}
+                  </p>
+
+                  {/* ✅ Date added */}
+                  <p className="text-xs text-gray-400 mt-1">
+                    Date: {formatDate(item.date || item.createdAt)}
                   </p>
                 </div>
 
