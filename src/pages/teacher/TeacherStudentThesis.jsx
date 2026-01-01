@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
+import SearchableDropdown from "../../components/SearchableDropdown";
 import api from "../../api/axios";
 
 const TeacherStudentThesis = () => {
@@ -32,16 +33,6 @@ const TeacherStudentThesis = () => {
     }
   };
 
-  const handleStudentChange = (e) => {
-    const studentId = e.target.value;
-    setSelectedStudent(studentId);
-    if (studentId) {
-      fetchStudentThesis(studentId);
-    } else {
-      setThesisList([]);
-    }
-  };
-
   return (
     <DashboardLayout>
       <div className="bg-white rounded-xl shadow-sm p-6">
@@ -50,18 +41,24 @@ const TeacherStudentThesis = () => {
         </h1>
 
         {/* Student Selector */}
-        <select
-          value={selectedStudent}
-          onChange={handleStudentChange}
-          className="border rounded-md px-3 py-2 text-sm mb-6 w-full md:w-1/2"
-        >
-          <option value="">Select Student</option>
-          {students.map((s, index) => (
-            <option key={index} value={s.student?._id}>
-              {s.student?.name}
-            </option>
-          ))}
-        </select>
+        <div className="mb-6 w-full md:w-1/2">
+          <SearchableDropdown
+            options={students.map((s) => ({
+              _id: s._id || s.student?._id,
+              name: s.studentName || s.student?.name,
+            }))}
+            value={selectedStudent}
+            onChange={(value) => {
+              setSelectedStudent(value);
+              if (value) {
+                fetchStudentThesis(value);
+              } else {
+                setThesisList([]);
+              }
+            }}
+            placeholder="Search student by name..."
+          />
+        </div>
 
         {/* Thesis List */}
         {loading ? (

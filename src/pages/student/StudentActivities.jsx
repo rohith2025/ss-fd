@@ -138,9 +138,18 @@ const StudentActivities = () => {
                   <h2 className="text-gray-800 font-medium">
                     {activity.title}
                   </h2>
-                  <span className="text-xs bg-sky-100 text-sky-700 px-2 py-1 rounded">
-                    {activity.type}
-                  </span>
+                  <div className="flex gap-2">
+                    <span className={`text-xs px-2 py-1 rounded ${
+                      activity.status === "approved" ? "bg-green-100 text-green-700" :
+                      activity.status === "rejected" ? "bg-red-100 text-red-700" :
+                      "bg-yellow-100 text-yellow-700"
+                    }`}>
+                      {activity.status || "pending"}
+                    </span>
+                    <span className="text-xs bg-sky-100 text-sky-700 px-2 py-1 rounded">
+                      {activity.type}
+                    </span>
+                  </div>
                 </div>
 
                 <p className="text-sm text-gray-600 mt-1">
@@ -161,6 +170,11 @@ const StudentActivities = () => {
                   >
                     View Certificate
                   </a>
+                )}
+                {activity.approvedBy && (
+                  <p className="text-xs text-gray-500 mt-2">
+                    Approved by: {activity.approvedBy?.name || "N/A"}
+                  </p>
                 )}
               </div>
             ))}

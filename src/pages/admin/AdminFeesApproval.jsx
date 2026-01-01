@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
+import SearchableDropdown from "../../components/SearchableDropdown";
 import api from "../../api/axios";
 
 const semesters = [
@@ -79,21 +80,13 @@ const AdminFeesApproval = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Student
               </label>
-              <select
+              <SearchableDropdown
+                options={students}
                 value={studentId}
-                onChange={(e) =>
-                  setStudentId(e.target.value)
-                }
+                onChange={setStudentId}
+                placeholder="Search student by name or email..."
                 required
-                className="w-full border rounded-md px-3 py-2 text-sm"
-              >
-                <option value="">Select student</option>
-                {students.map((s) => (
-                  <option key={s._id} value={s._id}>
-                    {s.name}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
 
             {/* Semester */}

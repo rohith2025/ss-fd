@@ -5,3 +5,6 @@ export const addActivity = (data) =>
 
 export const getActivities = (studentId) =>
   api.get(`/activities?studentId=${studentId}`);
+
+export const approveActivity = (activityId, status) =>
+  api.put(`/activities/${activityId}/approve`, { status });

@@ -4,6 +4,11 @@ import { useAuth } from "../context/AuthContext";
 const Sidebar = () => {
   const { role, logout } = useAuth();
 
+  // Defensive check: if role is null/undefined, don't render sidebar
+  if (!role) {
+    return null;
+  }
+
   const linkClass = ({ isActive }) =>
     `block px-4 py-2 rounded-md text-sm ${
       isActive
@@ -48,6 +53,16 @@ const Sidebar = () => {
       {/* HOD ONLY */}
       {role === "hod" && (
         <NavLink to="/hod/leaves" className={linkClass}>Leave Approvals</NavLink>
+      )}
+
+      {/* EXAM HEAD */}
+      {role === "exam_head" && (
+        <>
+          <NavLink to="/exam-head/dashboard" className={linkClass}>Dashboard</NavLink>
+          <NavLink to="/exam-head/activities" className={linkClass}>Verify Activities</NavLink>
+          <NavLink to="/exam-head/grades" className={linkClass}>Manage Grades</NavLink>
+          <NavLink to="/exam-head/students" className={linkClass}>Student Profiles</NavLink>
+        </>
       )}
 
       {/* ADMIN */}

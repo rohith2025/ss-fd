@@ -17,9 +17,11 @@ const Navbar = () => {
       </h1>
 
       <div className="flex items-center gap-4">
-        <span className="text-sm text-gray-600 capitalize">
-          {role}
-        </span>
+        {role && (
+          <span className="text-sm text-gray-600 capitalize">
+            {role}
+          </span>
+        )}
         <button
           onClick={handleLogout}
           className="text-sm bg-sky-600 hover:bg-sky-700 text-white px-4 py-1.5 rounded-md"

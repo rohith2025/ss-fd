@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
+import SearchableDropdown from "../../components/SearchableDropdown";
 import api from "../../api/axios";
 
 const TeacherAttendance = () => {
@@ -62,19 +63,17 @@ const TeacherAttendance = () => {
           onSubmit={handleMarkAttendance}
           className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4"
         >
-          <select
+          <SearchableDropdown
+            options={students.map((s) => ({
+              _id: s._id,
+              name: s.studentName,
+            }))}
             value={studentId}
-            onChange={(e) => setStudentId(e.target.value)}
+            onChange={setStudentId}
+            placeholder="Search student by name..."
             required
             className="border rounded-md px-3 py-2 text-sm"
-          >
-            <option value="">Select Student</option>
-            {students.map((s) => (
-              <option key={s._id} value={s._id}>
-                {s.studentName}
-              </option>
-            ))}
-          </select>
+          />
 
           <input
             type="text"

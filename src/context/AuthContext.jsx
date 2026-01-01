@@ -4,8 +4,8 @@ import api from "../api/axios";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem("token"));
-  const [role, setRole] = useState(localStorage.getItem("role"));
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [role, setRole] = useState(localStorage.getItem("role") || null);
 
   const login = async (jwtToken, userRole) => {
     // Store auth basics

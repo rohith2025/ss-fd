@@ -26,6 +26,12 @@ import TeacherAttendance from "./pages/teacher/TeacherAttendance";
 import TeacherStudentThesis from "./pages/teacher/TeacherStudentThesis";
 import HodLeaveDashboard from "./pages/teacher/HodLeaveDashboard";
 
+/* ===================== EXAM HEAD ===================== */
+import ExamHeadDashboard from "./pages/examHead/ExamHeadDashboard";
+import ExamHeadVerifyActivities from "./pages/examHead/ExamHeadVerifyActivities";
+import ExamHeadManageGrades from "./pages/examHead/ExamHeadManageGrades";
+import ExamHeadStudentProfiles from "./pages/examHead/ExamHeadStudentProfiles";
+
 /* ===================== ADMIN ===================== */
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
@@ -37,6 +43,7 @@ import AdminFeesApproval from "./pages/admin/AdminFeesApproval";
 import Holidays from "./pages/common/Holidays";
 import Notices from "./pages/common/Notices";
 import Notifications from "./pages/common/Notifications";
+import Unauthorized from "./pages/Unauthorized";
 
 const App = () => {
   return (
@@ -124,6 +131,28 @@ const App = () => {
         </ProtectedRoute>
       } />
 
+      {/* ========= EXAM HEAD ========= */}
+      <Route path="/exam-head/dashboard" element={
+        <ProtectedRoute allowedRoles={["exam_head"]}>
+          <ExamHeadDashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/exam-head/activities" element={
+        <ProtectedRoute allowedRoles={["exam_head"]}>
+          <ExamHeadVerifyActivities />
+        </ProtectedRoute>
+      } />
+      <Route path="/exam-head/grades" element={
+        <ProtectedRoute allowedRoles={["exam_head"]}>
+          <ExamHeadManageGrades />
+        </ProtectedRoute>
+      } />
+      <Route path="/exam-head/students" element={
+        <ProtectedRoute allowedRoles={["exam_head"]}>
+          <ExamHeadStudentProfiles />
+        </ProtectedRoute>
+      } />
+
       {/* ========= ADMIN ========= */}
       <Route path="/admin/dashboard" element={
         <ProtectedRoute allowedRoles={["admin"]}>
@@ -167,6 +196,9 @@ const App = () => {
           <Notifications />
         </ProtectedRoute>
       } />
+
+      {/* ========= UNAUTHORIZED ========= */}
+      <Route path="/unauthorized" element={<Unauthorized />} />
 
       {/* ========= FALLBACK ========= */}
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -28,9 +28,11 @@ const Login = () => {
       const res = await loginUser(form);
       login(res.data.token, res.data.role);
 
+      // Navigate based on role - exam_head should go to exam-head dashboard
       if (res.data.role === "student") navigate("/student/dashboard");
       else if (res.data.role === "parent") navigate("/parent/dashboard");
       else if (res.data.role === "admin") navigate("/admin/dashboard");
+      else if (res.data.role === "exam_head") navigate("/exam-head/dashboard");
       else navigate("/teacher/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
