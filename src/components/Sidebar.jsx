@@ -42,7 +42,7 @@ const Sidebar = () => {
       )}
 
       {/* TEACHER / HOD */}
-      {(role === "teacher" || role === "hod") && (
+      {role === "teacher" && (
         <>
           <NavLink to="/teacher/dashboard" className={linkClass}>Dashboard</NavLink>
           <NavLink to="/teacher/attendance" className={linkClass}>Attendance</NavLink>
@@ -52,7 +52,11 @@ const Sidebar = () => {
 
       {/* HOD ONLY */}
       {role === "hod" && (
+        <>
+        <NavLink to="/teacher/dashboard" className={linkClass}>Dashboard</NavLink>
         <NavLink to="/hod/leaves" className={linkClass}>Leave Approvals</NavLink>
+        <NavLink to="/hod/students" className={linkClass}>Student Profiles</NavLink>
+        </>
       )}
 
       {/* EXAM HEAD */}

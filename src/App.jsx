@@ -25,6 +25,8 @@ import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import TeacherAttendance from "./pages/teacher/TeacherAttendance";
 import TeacherStudentThesis from "./pages/teacher/TeacherStudentThesis";
 import HodLeaveDashboard from "./pages/teacher/HodLeaveDashboard";
+import HodStudentProfiles from "./pages/teacher/HodStudentProfiles";
+
 
 /* ===================== EXAM HEAD ===================== */
 import ExamHeadDashboard from "./pages/examHead/ExamHeadDashboard";
@@ -130,6 +132,14 @@ const App = () => {
           <HodLeaveDashboard />
         </ProtectedRoute>
       } />
+      <Route
+      path="/hod/students"
+      element={
+        <ProtectedRoute allowedRoles={["hod"]}>
+          <HodStudentProfiles />
+        </ProtectedRoute>
+      }/>
+
 
       {/* ========= EXAM HEAD ========= */}
       <Route path="/exam-head/dashboard" element={
