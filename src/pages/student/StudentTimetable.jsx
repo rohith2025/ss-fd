@@ -50,25 +50,53 @@ const StudentTimetable = () => {
                   </p>
                 ) : (
                   <div className="space-y-3">
-                    {period.slots.map((slot, idx) => (
-                      <div
-                        key={idx}
-                        className="border rounded-lg p-4 flex justify-between items-center"
-                      >
-                        <div>
-                          <p className="text-gray-800 font-medium">
-                            {slot.subject}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            {slot.teacher?.name || "—"}
-                          </p>
-                        </div>
+                    {period.slots.map((slot, idx) => {
+                      const isLunch = slot.subject === "LUNCH BREAK";
+                      const isEmpty = !slot.subject && !slot.teacher;
+                      return (
+                        <div
+                          key={idx}
+                          className={`border rounded-lg p-4 flex justify-between items-center ${
+                            isLunch
+                              ? "bg-yellow-50 border-yellow-200"
+                              : isEmpty
+                              ? "bg-gray-50 border-gray-200"
+                              : "bg-white"
+                          }`}
+                        >
+                          <div>
+                            <p
+                              className={`font-medium ${
+                                isLunch
+                                  ? "text-yellow-800"
+                                  : isEmpty
+                                  ? "text-gray-400"
+                                  : "text-gray-800"
+                              }`}
+                            >
+                              {slot.subject || (isEmpty ? "Free Period" : "")}
+                            </p>
+                            {!isLunch && !isEmpty && (
+                              <p className="text-sm text-gray-500">
+                                {slot.teacher?.name || "—"}
+                              </p>
+                            )}
+                          </div>
 
-                        <span className="text-sm text-gray-600">
-                          {slot.time}
-                        </span>
-                      </div>
-                    ))}
+                          <span
+                            className={`text-sm font-medium ${
+                              isLunch
+                                ? "text-yellow-700"
+                                : isEmpty
+                                ? "text-gray-400"
+                                : "text-gray-600"
+                            }`}
+                          >
+                            {slot.time}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>

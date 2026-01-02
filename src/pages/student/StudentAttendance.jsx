@@ -4,16 +4,31 @@ import api from "../../api/axios";
 
 const StudentAttendance = () => {
   const [attendance, setAttendance] = useState([]);
+  const [filteredAttendance, setFilteredAttendance] = useState([]);
+  const [selectedDay, setSelectedDay] = useState("All");
   const [loading, setLoading] = useState(true);
+
+  const days = ["All", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
   useEffect(() => {
     fetchAttendance();
   }, []);
 
+  useEffect(() => {
+    if (selectedDay === "All") {
+      setFilteredAttendance(attendance);
+    } else {
+      setFilteredAttendance(
+        attendance.filter((item) => item.day === selectedDay)
+      );
+    }
+  }, [selectedDay, attendance]);
+
   const fetchAttendance = async () => {
     try {
       const res = await api.get("/attendance/my");
       setAttendance(res.data || []);
+      setFilteredAttendance(res.data || []);
     } catch (err) {
       console.error("Failed to fetch attendance");
     } finally {
@@ -34,19 +49,32 @@ const StudentAttendance = () => {
   return (
     <DashboardLayout>
       <div className="bg-white rounded-xl shadow-sm p-6">
-        <h1 className="text-xl font-semibold text-gray-800 mb-4">
-          My Attendance
-        </h1>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-xl font-semibold text-gray-800">
+            My Attendance
+          </h1>
+          <select
+            value={selectedDay}
+            onChange={(e) => setSelectedDay(e.target.value)}
+            className="border rounded-md px-3 py-2 text-sm"
+          >
+            {days.map((day) => (
+              <option key={day} value={day}>
+                {day}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {loading ? (
           <p className="text-gray-500 text-sm">Loading attendance...</p>
-        ) : attendance.length === 0 ? (
+        ) : filteredAttendance.length === 0 ? (
           <p className="text-gray-500 text-sm">
-            No attendance records found
+            No attendance records found{selectedDay !== "All" ? ` for ${selectedDay}` : ""}
           </p>
         ) : (
           <div className="space-y-3">
-            {attendance.map((item) => (
+            {filteredAttendance.map((item) => (
               <div
                 key={item._id}
                 className="border rounded-lg p-4 flex justify-between items-center"

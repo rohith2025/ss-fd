@@ -24,8 +24,10 @@ import ParentChildAttendance from "./pages/parent/ParentChildAttendance";
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import TeacherAttendance from "./pages/teacher/TeacherAttendance";
 import TeacherStudentThesis from "./pages/teacher/TeacherStudentThesis";
+import TeacherTimetable from "./pages/teacher/TeacherTimetable";
 import HodLeaveDashboard from "./pages/teacher/HodLeaveDashboard";
 import HodStudentProfiles from "./pages/teacher/HodStudentProfiles";
+import HodTimetable from "./pages/teacher/HodTimetable";
 
 
 /* ===================== EXAM HEAD ===================== */
@@ -125,6 +127,11 @@ const App = () => {
           <TeacherStudentThesis />
         </ProtectedRoute>
       } />
+      <Route path="/teacher/timetable" element={
+        <ProtectedRoute allowedRoles={["teacher", "lab_assistant"]}>
+          <TeacherTimetable />
+        </ProtectedRoute>
+      } />
 
       {/* ========= HOD ========= */}
       <Route path="/hod/leaves" element={
@@ -139,6 +146,11 @@ const App = () => {
           <HodStudentProfiles />
         </ProtectedRoute>
       }/>
+      <Route path="/hod/timetable" element={
+        <ProtectedRoute allowedRoles={["hod"]}>
+          <HodTimetable />
+        </ProtectedRoute>
+      } />
 
 
       {/* ========= EXAM HEAD ========= */}
