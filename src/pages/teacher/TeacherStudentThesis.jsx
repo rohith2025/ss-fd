@@ -40,7 +40,6 @@ const TeacherStudentThesis = () => {
           Student Thesis
         </h1>
 
-        {/* Student Selector */}
         <div className="mb-6 w-full md:w-1/2">
           <SearchableDropdown
             options={students.map((s) => ({
@@ -60,7 +59,6 @@ const TeacherStudentThesis = () => {
           />
         </div>
 
-        {/* Thesis List */}
         {loading ? (
           <p className="text-gray-500 text-sm">
             Loading students...

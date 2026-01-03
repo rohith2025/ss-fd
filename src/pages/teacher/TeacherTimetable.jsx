@@ -21,7 +21,6 @@ const TeacherTimetable = () => {
     }
   };
 
-  // Group slots by day
   const groupedSlots = slots.reduce((acc, slot) => {
     if (!acc[slot.day]) {
       acc[slot.day] = [];
@@ -30,7 +29,6 @@ const TeacherTimetable = () => {
     return acc;
   }, {});
 
-  // Sort slots by time within each day
   Object.keys(groupedSlots).forEach((day) => {
     groupedSlots[day].sort((a, b) => {
       const timeA = a.time.split("-")[0] || "";

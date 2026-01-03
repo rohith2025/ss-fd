@@ -4,7 +4,6 @@ import { useAuth } from "../context/AuthContext";
 const Sidebar = () => {
   const { role, logout } = useAuth();
 
-  // Defensive check: if role is null/undefined, don't render sidebar
   if (!role) {
     return null;
   }

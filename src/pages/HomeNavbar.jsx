@@ -21,7 +21,6 @@ const HomeNavbar = () => {
       </Link>
 
       <div className="space-x-6 text-sm flex items-center">
-        {/* Section scroll buttons (only on Home page) */}
         {isHome && (
           <>
             <button

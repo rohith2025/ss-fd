@@ -75,7 +75,6 @@ const AdminFeesApproval = () => {
             onSubmit={handleApprove}
             className="space-y-5 max-w-md"
           >
-            {/* Student */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Student
@@ -89,7 +88,6 @@ const AdminFeesApproval = () => {
               />
             </div>
 
-            {/* Semester */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Semester
@@ -111,7 +109,6 @@ const AdminFeesApproval = () => {
               </select>
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               className="bg-sky-600 text-white px-5 py-2 rounded-md text-sm hover:bg-sky-700"

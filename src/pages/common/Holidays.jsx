@@ -8,7 +8,6 @@ const Holidays = () => {
   const [holidays, setHolidays] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Admin form state
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
 
@@ -46,7 +45,6 @@ const Holidays = () => {
           Holidays
         </h1>
 
-        {/* Admin Create Holiday */}
         {role === "admin" && (
           <form
             onSubmit={handleCreateHoliday}
@@ -78,7 +76,6 @@ const Holidays = () => {
           </form>
         )}
 
-        {/* Holiday List */}
         {loading ? (
           <p className="text-gray-500 text-sm">Loading holidays...</p>
         ) : holidays.length === 0 ? (

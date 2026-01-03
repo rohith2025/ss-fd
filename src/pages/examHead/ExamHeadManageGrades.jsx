@@ -63,7 +63,6 @@ const ExamHeadManageGrades = () => {
           <p className="text-gray-500 text-sm">Loading students...</p>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4 max-w-2xl">
-            {/* Searchable Student Dropdown */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Student

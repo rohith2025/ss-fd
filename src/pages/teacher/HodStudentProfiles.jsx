@@ -65,7 +65,6 @@ const HodStudentProfiles = () => {
           <p className="text-gray-500 text-sm">Loading students...</p>
         ) : (
           <div className="space-y-6">
-            {/* Searchable Student Selection */}
             <div className="max-w-md">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Select Student
@@ -78,12 +77,10 @@ const HodStudentProfiles = () => {
               />
             </div>
 
-            {/* Student Profile */}
             {profileLoading ? (
               <p className="text-gray-500 text-sm">Loading profile...</p>
             ) : profile ? (
               <div className="space-y-6">
-                {/* Student Info */}
                 <div className="border rounded-lg p-4">
                   <h2 className="text-lg font-medium text-gray-700 mb-3">
                     Student Information
@@ -116,7 +113,6 @@ const HodStudentProfiles = () => {
                   </div>
                 </div>
 
-                {/* Grades */}
                 {profile.grades && (
                   <div className="border rounded-lg p-4">
                     <h2 className="text-lg font-medium text-gray-700 mb-3">
@@ -139,7 +135,6 @@ const HodStudentProfiles = () => {
                   </div>
                 )}
 
-                {/* Attendance Summary */}
                 <div className="border rounded-lg p-4">
                   <div className="flex justify-between items-center mb-3">
                     <h2 className="text-lg font-medium text-gray-700">
@@ -154,7 +149,6 @@ const HodStudentProfiles = () => {
                     />
                   </div>
                   
-                  {/* Calculate filtered attendance and percentage */}
                   {(() => {
                     const filteredAtt = selectedDate
                       ? profile.attendance?.filter((att) => {
@@ -210,7 +204,6 @@ const HodStudentProfiles = () => {
                   })()}
                 </div>
 
-                {/* Approved Leaves Section */}
                 <div className="border rounded-lg p-4">
                   <div className="flex justify-between items-center mb-3">
                     <h2 className="text-lg font-medium text-gray-700">
@@ -254,7 +247,6 @@ const HodStudentProfiles = () => {
                   )}
                 </div>
 
-                {/* Activities Summary */}
                 <div className="border rounded-lg p-4">
                   <h2 className="text-lg font-medium text-gray-700 mb-3">
                     Activities ({profile.activities?.length || 0} records)
@@ -284,7 +276,6 @@ const HodStudentProfiles = () => {
                   )}
                 </div>
 
-                {/* Other Info */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="border rounded-lg p-4">
                     <h3 className="text-sm font-medium text-gray-700 mb-2">

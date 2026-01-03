@@ -7,7 +7,6 @@ const AdminUserLinking = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Selected IDs
   const [studentId, setStudentId] = useState("");
   const [parentId, setParentId] = useState("");
   const [teacherIds, setTeacherIds] = useState([]);
@@ -52,7 +51,6 @@ const AdminUserLinking = () => {
 
       alert("Users linked successfully");
 
-      // Reset form
       setStudentId("");
       setParentId("");
       setTeacherIds([]);
@@ -64,7 +62,6 @@ const AdminUserLinking = () => {
     }
   };
 
-  // Filter users by role
   const students = users.filter((u) => u.role === "student");
   const parents = users.filter((u) => u.role === "parent");
   const teachers = users.filter(
@@ -88,7 +85,6 @@ const AdminUserLinking = () => {
           <p className="text-gray-500 text-sm">Loading users...</p>
         ) : (
           <form onSubmit={handleLinkUsers} className="space-y-5">
-            {/* Student */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Student
@@ -102,7 +98,6 @@ const AdminUserLinking = () => {
               />
             </div>
 
-            {/* Parent */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Parent
@@ -116,7 +111,6 @@ const AdminUserLinking = () => {
               />
             </div>
 
-            {/* Teachers / Lab Assistants (Searchable + Multi Select) */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Teachers / Lab Assistants
@@ -129,7 +123,6 @@ const AdminUserLinking = () => {
                 placeholder="Search teacher or lab assistant..."
               />
 
-              {/* Selected Teachers */}
               {selectedTeachers.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
                   {selectedTeachers.map((t) => (
@@ -151,7 +144,6 @@ const AdminUserLinking = () => {
               )}
             </div>
 
-            {/* HOD */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 HOD
@@ -165,7 +157,6 @@ const AdminUserLinking = () => {
               />
             </div>
 
-            {/* Exam Head */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Exam Head
@@ -179,7 +170,6 @@ const AdminUserLinking = () => {
               />
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               className="bg-sky-600 text-white px-5 py-2 rounded-md text-sm hover:bg-sky-700"

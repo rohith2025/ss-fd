@@ -12,7 +12,6 @@ const ParentChildAttendance = () => {
 
   const fetchAttendance = async () => {
     try {
-      // 🔑 Get linked studentId stored after parent login
       const studentId = localStorage.getItem("studentId");
 
       if (!studentId) {
@@ -21,7 +20,6 @@ const ParentChildAttendance = () => {
         return;
       }
 
-      // ✅ Correct backend route usage
       const res = await api.get(`/parent/attendance/${studentId}`);
       setAttendance(res.data || []);
     } catch (err) {

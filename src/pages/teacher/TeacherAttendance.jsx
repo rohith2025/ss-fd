@@ -7,7 +7,6 @@ const TeacherAttendance = () => {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Attendance form
   const [studentId, setStudentId] = useState("");
   const [subject, setSubject] = useState("");
   const [status, setStatus] = useState("present");
@@ -58,7 +57,6 @@ const TeacherAttendance = () => {
           Attendance Management
         </h1>
 
-        {/* Mark Attendance */}
         <form
           onSubmit={handleMarkAttendance}
           className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4"
@@ -119,7 +117,6 @@ const TeacherAttendance = () => {
           </button>
         </form>
 
-        {/* Student Attendance View */}
         {loading ? (
           <p className="text-gray-500 text-sm">
             Loading students...

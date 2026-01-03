@@ -67,7 +67,6 @@ const StudentExams = () => {
                   Timing: {exam.timing}
                 </p>
 
-                {/* Files (if available) */}
                 <div className="mt-2 space-x-3">
                   {exam.syllabusFile && (
                     <a

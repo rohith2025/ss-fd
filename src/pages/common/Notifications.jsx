@@ -8,7 +8,6 @@ const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Admin form state
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [type, setType] = useState("general");
@@ -48,7 +47,6 @@ const Notifications = () => {
           Notifications
         </h1>
 
-        {/* Admin Create Notification */}
         {role === "admin" && (
           <form
             onSubmit={handleCreateNotification}
@@ -93,7 +91,6 @@ const Notifications = () => {
           </form>
         )}
 
-        {/* Notifications List */}
         {loading ? (
           <p className="text-gray-500 text-sm">
             Loading notifications...

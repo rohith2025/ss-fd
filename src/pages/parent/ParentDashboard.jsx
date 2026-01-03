@@ -7,7 +7,6 @@ const ParentDashboard = () => {
   const [leaves, setLeaves] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch parent-specific leaves
   useEffect(() => {
     const fetchLeaves = async () => {
       try {
@@ -23,7 +22,6 @@ const ParentDashboard = () => {
     fetchLeaves();
   }, []);
 
-  // ✅ ONLY pending leaves
   const pendingLeaves = leaves.filter(
     (l) => l.parentStatus === "pending"
   );
@@ -32,7 +30,6 @@ const ParentDashboard = () => {
     try {
       await api.put(`/leaves/parent/${leaveId}`, { status });
 
-      // update UI after action
       setLeaves((prev) =>
         prev.map((leave) =>
           leave._id === leaveId

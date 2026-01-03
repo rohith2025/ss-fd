@@ -6,7 +6,6 @@ const StudentLeaves = () => {
   const [leaves, setLeaves] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Apply leave form state
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [reason, setReason] = useState("");
@@ -51,7 +50,6 @@ const StudentLeaves = () => {
           Leave Requests
         </h1>
 
-        {/* Apply Leave Form */}
         <form
           onSubmit={handleApplyLeave}
           className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4"
@@ -89,7 +87,6 @@ const StudentLeaves = () => {
           </button>
         </form>
 
-        {/* Leave History */}
         {loading ? (
           <p className="text-gray-500 text-sm">Loading leave history...</p>
         ) : leaves.length === 0 ? (

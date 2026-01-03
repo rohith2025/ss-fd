@@ -36,7 +36,6 @@ const StudentDashboard = () => {
 
   return (
     <DashboardLayout>
-      {/* Top Navbar */}
       <div className="bg-white shadow-sm px-6 py-4">
         <h1 className="text-xl font-semibold text-gray-800">
           Student Dashboard
@@ -46,9 +45,7 @@ const StudentDashboard = () => {
         </p>
       </div>
 
-      {/* Main Content */}
       <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Profile Card */}
         <div className="bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Profile
@@ -64,7 +61,6 @@ const StudentDashboard = () => {
           </p>
         </div>
 
-        {/* Attendance Card */}
         <div className="bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Attendance
@@ -77,7 +73,6 @@ const StudentDashboard = () => {
           </p>
         </div>
 
-        {/* Grades Card */}
         <div className="bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Grades

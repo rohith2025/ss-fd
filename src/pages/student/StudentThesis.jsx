@@ -6,14 +6,11 @@ const StudentThesis = () => {
   const [thesisList, setThesisList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Upload form state
   const [subject, setSubject] = useState("");
   const [title, setTitle] = useState("");
   const [fileUrl, setFileUrl] = useState("");
 
   useEffect(() => {
-    // Student sees own uploaded thesis (from backend response history if extended later)
-    // For now, we rely on local state update after upload
     setLoading(false);
   }, []);
 
@@ -43,7 +40,6 @@ const StudentThesis = () => {
           My Thesis
         </h1>
 
-        {/* Upload Thesis Form */}
         <form
           onSubmit={handleUploadThesis}
           className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4"
@@ -83,7 +79,6 @@ const StudentThesis = () => {
           </button>
         </form>
 
-        {/* Thesis List */}
         {loading ? (
           <p className="text-gray-500 text-sm">
             Loading thesis...

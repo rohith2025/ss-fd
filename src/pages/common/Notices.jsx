@@ -8,7 +8,6 @@ const Notices = () => {
   const [notices, setNotices] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Admin form state
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -46,7 +45,6 @@ const Notices = () => {
           Notices
         </h1>
 
-        {/* Admin Create Notice */}
         {role === "admin" && (
           <form
             onSubmit={handleCreateNotice}
@@ -79,7 +77,6 @@ const Notices = () => {
           </form>
         )}
 
-        {/* Notices List */}
         {loading ? (
           <p className="text-gray-500 text-sm">Loading notices...</p>
         ) : notices.length === 0 ? (

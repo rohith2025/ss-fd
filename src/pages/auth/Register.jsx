@@ -39,7 +39,6 @@ const Register = () => {
         role: form.role,
       };
 
-      // Student fields
       if (form.role === "student") {
         payload.year = form.year;
         payload.branch = form.branch;
@@ -47,14 +46,12 @@ const Register = () => {
         payload.section = form.section;
       }
 
-      // Managed Branch (except parent & admin)
       if (
         ["teacher", "hod", "lab_assistant", "exam_head"].includes(form.role)
       ) {
         payload.managedBranch = form.managedBranch;
       }
 
-      // Subjects (teacher & lab assistant only)
       if (["teacher", "lab_assistant"].includes(form.role)) {
         payload.subjects = form.subjects
           .split(",")
@@ -88,7 +85,6 @@ const Register = () => {
           )}
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-            {/* Name */}
             <div>
               <label className="block text-sm text-gray-600 mb-1">Name</label>
               <input
@@ -100,7 +96,6 @@ const Register = () => {
               />
             </div>
 
-            {/* Email */}
             <div>
               <label className="block text-sm text-gray-600 mb-1">Email</label>
               <input
@@ -113,7 +108,6 @@ const Register = () => {
               />
             </div>
 
-            {/* Password */}
             <div>
               <label className="block text-sm text-gray-600 mb-1">Password</label>
               <input
@@ -126,7 +120,6 @@ const Register = () => {
               />
             </div>
 
-            {/* Role */}
             <div>
               <label className="block text-sm text-gray-600 mb-1">Role</label>
               <select
@@ -145,7 +138,6 @@ const Register = () => {
               </select>
             </div>
 
-            {/* Student Fields */}
             {form.role === "student" && (
               <div className="grid grid-cols-2 gap-3">
                 <input
@@ -179,7 +171,6 @@ const Register = () => {
               </div>
             )}
 
-            {/* Managed Branch */}
             {["teacher", "hod", "lab_assistant", "exam_head"].includes(
               form.role
             ) && (
@@ -197,7 +188,6 @@ const Register = () => {
               </div>
             )}
 
-            {/* Subjects */}
             {["teacher", "lab_assistant"].includes(form.role) && (
               <div>
                 <label className="block text-sm text-gray-600 mb-1">

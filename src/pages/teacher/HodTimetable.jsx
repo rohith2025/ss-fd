@@ -8,11 +8,10 @@ const HodTimetable = () => {
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fixed time slots
   const timeSlots = [
     "10:00 AM - 11:00 AM",
     "11:00 AM - 12:00 PM",
-    "12:00 PM - 1:00 PM", // LUNCH BREAK
+    "12:00 PM - 1:00 PM", 
     "1:00 PM - 2:00 PM",
     "2:00 PM - 3:00 PM",
     "3:00 PM - 4:00 PM",
@@ -20,10 +19,9 @@ const HodTimetable = () => {
 
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
-  // Form state - slots indexed by day and timeIndex
   const [year, setYear] = useState("");
   const [section, setSection] = useState("");
-  const [slots, setSlots] = useState({}); // { "Monday-0": { teacher: "", subject: "" }, ... }
+  const [slots, setSlots] = useState({}); 
 
   useEffect(() => {
     fetchTeachers();
@@ -50,7 +48,6 @@ const HodTimetable = () => {
         newSlots[key] = { teacher: "", subject: "" };
       }
       newSlots[key][field] = value;
-      // If teacher changes, reset subject
       if (field === "teacher") {
         newSlots[key].subject = "";
       }
@@ -66,7 +63,6 @@ const HodTimetable = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Convert slots object to periods format
       const periods = days.map((day) => ({
         day,
         slots: timeSlots.map((time, timeIndex) => {
@@ -86,7 +82,6 @@ const HodTimetable = () => {
         periods,
       });
       alert("Timetable created successfully!");
-      // Reset form
       setYear("");
       setSection("");
       setSlots({});
@@ -110,7 +105,6 @@ const HodTimetable = () => {
           <p className="text-gray-500 text-sm">Loading teachers...</p>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Year and Section */}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -144,7 +138,6 @@ const HodTimetable = () => {
               </div>
             </div>
 
-            {/* Periods */}
             {days.map((day) => (
               <div key={day} className="border rounded-lg p-4">
                 <h3 className="text-lg font-medium text-gray-700 mb-3">
@@ -153,7 +146,7 @@ const HodTimetable = () => {
 
                 <div className="space-y-3">
                   {timeSlots.map((time, timeIndex) => {
-                    const isLunch = timeIndex === 2; // 12:00 PM - 1:00 PM
+                    const isLunch = timeIndex === 2; 
                     const teacherId = getSlotValue(day, timeIndex, "teacher");
                     const subject = getSlotValue(day, timeIndex, "subject");
                     const selectedTeacher = teachers.find((t) => t._id === teacherId);
@@ -165,7 +158,6 @@ const HodTimetable = () => {
                           isLunch ? "bg-yellow-50 border-2 border-yellow-200" : "bg-gray-50"
                         }`}
                       >
-                        {/* Time (read-only) */}
                         <div className="flex items-center">
                           <span
                             className={`text-sm font-medium ${
@@ -177,7 +169,6 @@ const HodTimetable = () => {
                           </span>
                         </div>
 
-                        {/* Teacher (disabled during lunch) */}
                         <select
                           value={teacherId}
                           onChange={(e) =>
@@ -201,7 +192,6 @@ const HodTimetable = () => {
                             ))}
                         </select>
 
-                        {/* Subject (disabled during lunch or if no teacher) */}
                         <select
                           value={subject}
                           onChange={(e) =>
@@ -230,7 +220,6 @@ const HodTimetable = () => {
                             ))}
                         </select>
 
-                        {/* Clear button (disabled during lunch) */}
                         <button
                           type="button"
                           onClick={() => {

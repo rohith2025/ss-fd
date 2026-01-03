@@ -18,7 +18,6 @@ const StudentAttendance = () => {
   useEffect(() => {
     let filtered = attendance;
     
-    // Filter by date if selected
     if (selectedDate) {
       const selectedDateObj = new Date(selectedDate);
       filtered = filtered.filter((item) => {
@@ -31,7 +30,6 @@ const StudentAttendance = () => {
       });
     }
     
-    // Filter by day if selected
     if (selectedDay !== "All") {
       filtered = filtered.filter((item) => item.day === selectedDay);
     }
@@ -53,7 +51,6 @@ const StudentAttendance = () => {
     }
   };
 
-  // Calculate attendance percentage
   const calculatePercentage = () => {
     if (filteredAttendance.length === 0) return 0;
     const presentCount = filteredAttendance.filter(
@@ -62,7 +59,6 @@ const StudentAttendance = () => {
     return ((presentCount / filteredAttendance.length) * 100).toFixed(1);
   };
 
-  // ✅ Date formatter (safe)
   const formatDate = (dateValue) => {
     if (!dateValue) return "N/A";
     return new Date(dateValue).toLocaleDateString("en-IN", {
@@ -85,7 +81,7 @@ const StudentAttendance = () => {
               value={selectedDate}
               onChange={(e) => {
                 setSelectedDate(e.target.value);
-                setSelectedDay("All"); // Reset day filter when date is selected
+                setSelectedDay("All"); 
               }}
               className="border rounded-md px-3 py-2 text-sm"
             />
@@ -103,7 +99,6 @@ const StudentAttendance = () => {
           </div>
         </div>
 
-        {/* Attendance Percentage */}
         {!loading && filteredAttendance.length > 0 && (
           <div className="mb-4 p-3 bg-sky-50 rounded-lg">
             <p className="text-sm font-medium text-gray-700">
@@ -133,12 +128,10 @@ const StudentAttendance = () => {
                     {item.subject}
                   </p>
 
-                  {/* ✅ Day + Time */}
                   <p className="text-sm text-gray-500">
                     {item.day} • {item.time}
                   </p>
 
-                  {/* ✅ Date added */}
                   <p className="text-xs text-gray-400 mt-1">
                     Date: {formatDate(item.date || item.createdAt)}
                   </p>

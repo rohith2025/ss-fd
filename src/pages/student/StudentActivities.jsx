@@ -8,7 +8,6 @@ const StudentActivities = () => {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Form state
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
   const [description, setDescription] = useState("");
@@ -62,7 +61,6 @@ const StudentActivities = () => {
           My Activities
         </h1>
 
-        {/* Add Activity Form */}
         <form
           onSubmit={handleAddActivity}
           className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4"
@@ -118,7 +116,6 @@ const StudentActivities = () => {
           </button>
         </form>
 
-        {/* Activities List */}
         {loading ? (
           <p className="text-gray-500 text-sm">
             Loading activities...

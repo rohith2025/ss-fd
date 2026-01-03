@@ -24,7 +24,7 @@ const ExamHeadVerifyActivities = () => {
   const handleApprove = async (activityId, status) => {
     try {
       await approveActivity(activityId, status);
-      fetchActivities(); // Refresh list
+      fetchActivities(); 
     } catch (err) {
       console.error("Failed to update activity");
       alert("Failed to update activity");

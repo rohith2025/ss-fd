@@ -36,7 +36,6 @@ const AdminDashboard = () => {
 
   return (
     <DashboardLayout>
-      {/* Navbar */}
       <div className="bg-white shadow-sm px-6 py-4">
         <h1 className="text-xl font-semibold text-gray-800">
           Admin Dashboard
@@ -46,9 +45,7 @@ const AdminDashboard = () => {
         </p>
       </div>
 
-      {/* Main Content */}
       <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Users Card */}
         <div className="bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Total Users
@@ -61,7 +58,6 @@ const AdminDashboard = () => {
           </p>
         </div>
 
-        {/* Transactions Card */}
         <div className="bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Transactions
@@ -74,7 +70,6 @@ const AdminDashboard = () => {
           </p>
         </div>
 
-        {/* Actions Card */}
         <div className="bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Admin Actions

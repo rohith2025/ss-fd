@@ -10,7 +10,6 @@ const AdminUsers = () => {
   const [userLinks, setUserLinks] = useState(null);
   const [loadingLinks, setLoadingLinks] = useState(false);
 
-  // Filters
   const [searchText, setSearchText] = useState("");
   const [selectedRole, setSelectedRole] = useState("all");
   const [selectedBranch, setSelectedBranch] = useState("all");
@@ -34,7 +33,6 @@ const AdminUsers = () => {
 
   const handleViewLinks = async (studentId) => {
     if (selectedStudentId === studentId && userLinks) {
-      // Toggle off if clicking same student
       setSelectedStudentId(null);
       setUserLinks(null);
       return;
@@ -53,7 +51,6 @@ const AdminUsers = () => {
     }
   };
 
-  // Get unique branches dynamically
   const branchOptions = [
     "all",
     ...Array.from(
@@ -65,7 +62,6 @@ const AdminUsers = () => {
     ),
   ];
 
-  // Filter logic
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
       !searchText ||

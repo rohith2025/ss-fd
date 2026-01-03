@@ -8,29 +8,18 @@ export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(localStorage.getItem("role") || null);
 
   const login = async (jwtToken, userRole) => {
-    // Store auth basics
     localStorage.setItem("token", jwtToken);
     localStorage.setItem("role", userRole);
     setToken(jwtToken);
     setRole(userRole);
 
-    // 🔑 EXTRA STEP ONLY FOR PARENT
     if (userRole === "parent") {
       try {
-        /**
-         * Decode JWT to get parentId
-         * JWT payload is base64 encoded
-         */
         const payload = JSON.parse(
           atob(jwtToken.split(".")[1])
         );
         const parentId = payload.id;
 
-        /**
-         * Fetch UserLink data
-         * We already have admin/users endpoint
-         * Backend unchanged
-         */
         const res = await api.get("/admin/users");
 
         const parentLink = res.data.find(
@@ -55,7 +44,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-    localStorage.removeItem("studentId"); // 🔑 cleanup
+    localStorage.removeItem("studentId");
     setToken(null);
     setRole(null);
   };

@@ -6,7 +6,6 @@ const Home = () => {
     <div className="min-h-screen bg-sky-50">
       <HomeNavbar />
 
-      {/* ================= HERO ================= */}
       <section
         id="home"
         className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center px-10 py-28 max-w-7xl mx-auto"
@@ -43,7 +42,6 @@ const Home = () => {
         />
       </section>
 
-      {/* ================= TRUST / STATS ================= */}
       <section className="bg-white px-10 py-16">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
           {[
@@ -64,7 +62,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= ABOUT ================= */}
       <section id="about" className="bg-white px-10 py-24">
         <div className="max-w-5xl mx-auto text-center">
           <h3 className="text-3xl font-semibold text-gray-800 mb-6">
@@ -80,7 +77,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= FEATURES ================= */}
       <section id="features" className="bg-sky-50 px-10 py-24">
         <h3 className="text-3xl font-semibold text-center text-gray-800 mb-14">
           Powerful Features
@@ -110,7 +106,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= HOW IT WORKS ================= */}
       <section className="bg-white px-10 py-24">
         <h3 className="text-3xl font-semibold text-center text-gray-800 mb-12">
           How ShikshaSetu Works
@@ -135,7 +130,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= WHO CAN USE ================= */}
       <section id="roles" className="bg-white px-10 py-24">
         <h3 className="text-3xl font-semibold text-center text-gray-800 mb-12">
           Who Can Use ShikshaSetu?
@@ -161,7 +155,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ================= CTA ================= */}
       <section className="bg-sky-600 text-white px-10 py-20 text-center">
         <h3 className="text-3xl font-semibold mb-4">
           Ready to Experience Smart Education?
@@ -177,7 +170,6 @@ const Home = () => {
         </Link>
       </section>
 
-      {/* ================= FOOTER ================= */}
       <footer className="bg-white text-center py-6 text-sm text-gray-500">
         © {new Date().getFullYear()} ShikshaSetu. All rights reserved.
       </footer>
