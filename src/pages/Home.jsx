@@ -12,12 +12,10 @@ const Home = () => {
       >
         <div>
           <h2 className="text-4xl font-bold text-gray-800 mb-4">
-            Smart College Management System
+           Bridging Students, Parents & Teachers
           </h2>
           <p className="text-gray-600 mb-6 leading-relaxed">
-            ShikshaSetu is a secure, role-based academic management
-            platform that connects students, parents, teachers,
-            HODs, exam heads, and administrators into one unified system.
+            ShikshaSetu is a secure, role-based academic management platform that bridges students, parents, and teachers, enabling seamless coordination for HODs, exam heads, and administrators within a single unified system.
           </p>
           <div className="space-x-4">
             <Link

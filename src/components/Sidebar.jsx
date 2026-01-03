@@ -26,7 +26,6 @@ const Sidebar = () => {
           <NavLink to="/student/exams" className={linkClass}>Exams</NavLink>
           <NavLink to="/student/fees" className={linkClass}>Fees</NavLink>
           <NavLink to="/student/leaves" className={linkClass}>Leaves</NavLink>
-          <NavLink to="/student/activities" className={linkClass}>Activities</NavLink>
           <NavLink to="/student/thesis" className={linkClass}>Thesis</NavLink>
           <NavLink to="/student/timetable" className={linkClass}>Timetable</NavLink>
         </>
@@ -64,9 +63,9 @@ const Sidebar = () => {
       {role === "exam_head" && (
         <>
           <NavLink to="/exam-head/dashboard" className={linkClass}>Dashboard</NavLink>
-          <NavLink to="/exam-head/activities" className={linkClass}>Verify Activities</NavLink>
           <NavLink to="/exam-head/grades" className={linkClass}>Manage Grades</NavLink>
           <NavLink to="/exam-head/students" className={linkClass}>Student Profiles</NavLink>
+          <NavLink to="/exam-head/exams" className={linkClass}>Create Exam</NavLink>
         </>
       )}
 

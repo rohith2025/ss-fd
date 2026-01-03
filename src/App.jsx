@@ -2,11 +2,9 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Home from "./pages/Home";
 
-/* ===================== AUTH ===================== */
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 
-/* ===================== STUDENT ===================== */
 import StudentDashboard from "./pages/student/StudentDashboard";
 import StudentAttendance from "./pages/student/StudentAttendance";
 import StudentExams from "./pages/student/StudentExams";
@@ -16,11 +14,9 @@ import StudentActivities from "./pages/student/StudentActivities";
 import StudentThesis from "./pages/student/StudentThesis";
 import StudentTimetable from "./pages/student/StudentTimetable";
 
-/* ===================== PARENT ===================== */
 import ParentDashboard from "./pages/parent/ParentDashboard";
 import ParentChildAttendance from "./pages/parent/ParentChildAttendance";
 
-/* ===================== TEACHER / HOD ===================== */
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import TeacherAttendance from "./pages/teacher/TeacherAttendance";
 import TeacherStudentThesis from "./pages/teacher/TeacherStudentThesis";
@@ -30,20 +26,17 @@ import HodStudentProfiles from "./pages/teacher/HodStudentProfiles";
 import HodTimetable from "./pages/teacher/HodTimetable";
 
 
-/* ===================== EXAM HEAD ===================== */
 import ExamHeadDashboard from "./pages/examHead/ExamHeadDashboard";
-import ExamHeadVerifyActivities from "./pages/examHead/ExamHeadVerifyActivities";
+import ExamHeadCreateExam from "./pages/examHead/ExamHeadCreateExam";
 import ExamHeadManageGrades from "./pages/examHead/ExamHeadManageGrades";
 import ExamHeadStudentProfiles from "./pages/examHead/ExamHeadStudentProfiles";
 
-/* ===================== ADMIN ===================== */
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminUserLinking from "./pages/admin/AdminUserLinking";
 import AdminTransactions from "./pages/admin/AdminTransactions";
 import AdminFeesApproval from "./pages/admin/AdminFeesApproval";
 
-/* ===================== COMMON ===================== */
 import Holidays from "./pages/common/Holidays";
 import Notices from "./pages/common/Notices";
 import Notifications from "./pages/common/Notifications";
@@ -159,9 +152,9 @@ const App = () => {
           <ExamHeadDashboard />
         </ProtectedRoute>
       } />
-      <Route path="/exam-head/activities" element={
+      <Route path="/exam-head/exams" element={
         <ProtectedRoute allowedRoles={["exam_head"]}>
-          <ExamHeadVerifyActivities />
+          <ExamHeadCreateExam />
         </ProtectedRoute>
       } />
       <Route path="/exam-head/grades" element={

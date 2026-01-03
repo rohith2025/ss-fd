@@ -46,9 +46,6 @@ const StudentFees = () => {
                     <p className="text-gray-700 font-medium capitalize">
                       {semester}
                     </p>
-                    <p className="text-sm text-gray-500">
-                      Amount: ₹{data.amount}
-                    </p>
                   </div>
 
                   <span

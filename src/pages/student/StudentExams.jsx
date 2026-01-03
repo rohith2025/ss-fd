@@ -21,6 +21,23 @@ const StudentExams = () => {
     }
   };
 
+  const formatDate = (date) => {
+    if (!date) return "—";
+    const d = new Date(date);
+    return d.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  const getDay = (date) => {
+    if (!date) return "";
+    return new Date(date).toLocaleDateString("en-IN", {
+      weekday: "long",
+    });
+  };
+
   return (
     <DashboardLayout>
       <div className="bg-white rounded-xl shadow-sm p-6">
@@ -61,6 +78,10 @@ const StudentExams = () => {
 
                 <p className="text-sm text-gray-600 mt-1">
                   Branch: {exam.branch} • Year: {exam.year}
+                </p>
+
+                <p className="text-sm text-gray-600 mt-1">
+                  Date: {formatDate(exam.examDate)} ({getDay(exam.examDate)})
                 </p>
 
                 <p className="text-sm text-gray-500 mt-1">

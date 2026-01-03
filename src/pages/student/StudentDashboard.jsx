@@ -3,19 +3,21 @@ import { getStudentDashboard } from "../../api/student.api";
 import { useAuth } from "../../context/AuthContext";
 import DashboardLayout from "../../components/DashboardLayout";
 
-
 const StudentDashboard = () => {
   const { role } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [filteredAttendance, setFilteredAttendance] = useState([]);
 
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
         const res = await getStudentDashboard();
         setData(res.data);
+
+        setFilteredAttendance(res.data?.attendance || []);
       } catch (error) {
-        console.error("Failed to load dashboard");
+        console.error("Failed to load dashboard", error);
       } finally {
         setLoading(false);
       }
@@ -31,6 +33,16 @@ const StudentDashboard = () => {
       </div>
     );
   }
+
+  const calculatePercentage = () => {
+    if (!filteredAttendance || filteredAttendance.length === 0) return "0.0";
+
+    const presentCount = filteredAttendance.filter(
+      (item) => item.status === "present"
+    ).length;
+
+    return ((presentCount / filteredAttendance.length) * 100).toFixed(1);
+  };
 
   const { student, attendance, grades } = data || {};
 
@@ -66,10 +78,10 @@ const StudentDashboard = () => {
             Attendance
           </h2>
           <p className="text-3xl font-semibold text-sky-600">
-            {attendance?.length || 0}
+            {calculatePercentage()}%
           </p>
           <p className="text-sm text-gray-500">
-            Records available
+            Total Records: {filteredAttendance.length}
           </p>
         </div>
 
