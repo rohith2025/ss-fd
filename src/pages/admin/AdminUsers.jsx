@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import api from "../../api/axios";
+import { getUserLinks } from "../../api/admin.api";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [userLinks, setUserLinks] = useState(null);
+  const [loadingLinks, setLoadingLinks] = useState(false);
 
   // Filters
   const [searchText, setSearchText] = useState("");
@@ -25,6 +29,27 @@ const AdminUsers = () => {
       console.error("Failed to fetch users");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleViewLinks = async (studentId) => {
+    if (selectedStudentId === studentId && userLinks) {
+      // Toggle off if clicking same student
+      setSelectedStudentId(null);
+      setUserLinks(null);
+      return;
+    }
+
+    setSelectedStudentId(studentId);
+    setLoadingLinks(true);
+    try {
+      const res = await getUserLinks(studentId);
+      setUserLinks(res.data);
+    } catch (err) {
+      console.error("Failed to fetch user links");
+      setUserLinks(null);
+    } finally {
+      setLoadingLinks(false);
     }
   };
 
@@ -159,37 +184,93 @@ const AdminUsers = () => {
                   <th className="border px-3 py-2 text-left">Subjects</th>
                   <th className="border px-3 py-2 text-left">Year</th>
                   <th className="border px-3 py-2 text-left">Status</th>
+                  <th className="border px-3 py-2 text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredUsers.map((user) => (
-                  <tr key={user._id} className="hover:bg-gray-50">
-                    <td className="border px-3 py-2">{user.name}</td>
-                    <td className="border px-3 py-2">{user.email}</td>
-                    <td className="border px-3 py-2 capitalize">{user.role}</td>
-                    <td className="border px-3 py-2">
-                      {user.branch || "N/A"}
-                    </td>
-                    <td className="border px-3 py-2">
-                      {user.subjects?.length
-                        ? user.subjects.join(", ")
-                        : "N/A"}
-                    </td>
-                    <td className="border px-3 py-2">
-                      {user.year || "N/A"}
-                    </td>
-                    <td className="border px-3 py-2">
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-xs ${
-                          user.isActive
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"
-                        }`}
-                      >
-                        {user.isActive ? "Active" : "Inactive"}
-                      </span>
-                    </td>
-                  </tr>
+                  <>
+                    <tr key={user._id} className="hover:bg-gray-50">
+                      <td className="border px-3 py-2">{user.name}</td>
+                      <td className="border px-3 py-2">{user.email}</td>
+                      <td className="border px-3 py-2 capitalize">{user.role}</td>
+                      <td className="border px-3 py-2">
+                        {user.branch || "N/A"}
+                      </td>
+                      <td className="border px-3 py-2">
+                        {user.subjects?.length
+                          ? user.subjects.join(", ")
+                          : "N/A"}
+                      </td>
+                      <td className="border px-3 py-2">
+                        {user.year || "N/A"}
+                      </td>
+                      <td className="border px-3 py-2">
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-xs ${
+                            user.isActive
+                              ? "bg-green-100 text-green-700"
+                              : "bg-red-100 text-red-700"
+                          }`}
+                        >
+                          {user.isActive ? "Active" : "Inactive"}
+                        </span>
+                      </td>
+                      <td className="border px-3 py-2">
+                        {user.role === "student" && (
+                          <button
+                            onClick={() => handleViewLinks(user._id)}
+                            className="text-xs text-sky-600 hover:text-sky-700"
+                          >
+                            {selectedStudentId === user._id ? "Hide Links" : "View Links"}
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                    {user.role === "student" && selectedStudentId === user._id && (
+                      <tr>
+                        <td colSpan="8" className="border px-3 py-4 bg-gray-50">
+                          {loadingLinks ? (
+                            <p className="text-sm text-gray-500">Loading links...</p>
+                          ) : userLinks ? (
+                            <div className="space-y-3">
+                              <h3 className="font-medium text-gray-700 mb-2">User Links</h3>
+                              <div className="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                  <span className="text-gray-500">Parent:</span>
+                                  <span className="ml-2 text-gray-800">
+                                    {userLinks.parent ? `${userLinks.parent.name} (${userLinks.parent.email})` : "Not Linked"}
+                                  </span>
+                                </div>
+                                <div>
+                                  <span className="text-gray-500">HOD:</span>
+                                  <span className="ml-2 text-gray-800">
+                                    {userLinks.hod ? `${userLinks.hod.name} (${userLinks.hod.email})` : "Not Linked"}
+                                  </span>
+                                </div>
+                                <div>
+                                  <span className="text-gray-500">Exam Head:</span>
+                                  <span className="ml-2 text-gray-800">
+                                    {userLinks.examHead ? `${userLinks.examHead.name} (${userLinks.examHead.email})` : "Not Linked"}
+                                  </span>
+                                </div>
+                                <div>
+                                  <span className="text-gray-500">Teachers:</span>
+                                  <span className="ml-2 text-gray-800">
+                                    {userLinks.teachers && userLinks.teachers.length > 0
+                                      ? userLinks.teachers.map((t) => `${t.name} (${t.email})`).join(", ")
+                                      : "Not Linked"}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <p className="text-sm text-gray-500">No links found</p>
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                  </>
                 ))}
               </tbody>
             </table>

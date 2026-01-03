@@ -10,6 +10,8 @@ const ExamHeadStudentProfiles = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [profileLoading, setProfileLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [showLeaves, setShowLeaves] = useState(false);
 
   useEffect(() => {
     fetchStudents();
@@ -139,27 +141,116 @@ const ExamHeadStudentProfiles = () => {
 
                 {/* Attendance Summary */}
                 <div className="border rounded-lg p-4">
-                  <h2 className="text-lg font-medium text-gray-700 mb-3">
-                    Attendance ({profile.attendance?.length || 0} records)
-                  </h2>
-                  {profile.attendance?.length > 0 ? (
-                    <div className="text-sm space-y-1 max-h-40 overflow-auto">
-                      {profile.attendance.slice(0, 5).map((att, idx) => (
-                        <div key={idx} className="flex justify-between">
-                          <span>{att.subject}</span>
-                          <span className={att.status === "present" ? "text-green-600" : "text-red-600"}>
-                            {att.status}
-                          </span>
-                        </div>
-                      ))}
-                      {profile.attendance.length > 5 && (
-                        <p className="text-gray-500 text-xs mt-2">
-                          +{profile.attendance.length - 5} more records
-                        </p>
-                      )}
+                  <div className="flex justify-between items-center mb-3">
+                    <h2 className="text-lg font-medium text-gray-700">
+                      Attendance ({profile.attendance?.length || 0} records)
+                    </h2>
+                    <input
+                      type="date"
+                      value={selectedDate}
+                      onChange={(e) => setSelectedDate(e.target.value)}
+                      className="border rounded-md px-2 py-1 text-xs"
+                      placeholder="Filter by date"
+                    />
+                  </div>
+                  
+                  {/* Calculate filtered attendance and percentage */}
+                  {(() => {
+                    const filteredAtt = selectedDate
+                      ? profile.attendance?.filter((att) => {
+                          const attDate = new Date(att.date || att.createdAt);
+                          const selectedDateObj = new Date(selectedDate);
+                          return (
+                            attDate.getDate() === selectedDateObj.getDate() &&
+                            attDate.getMonth() === selectedDateObj.getMonth() &&
+                            attDate.getFullYear() === selectedDateObj.getFullYear()
+                          );
+                        }) || []
+                      : profile.attendance || [];
+                    
+                    const presentCount = filteredAtt.filter((att) => att.status === "present").length;
+                    const percentage = filteredAtt.length > 0 
+                      ? ((presentCount / filteredAtt.length) * 100).toFixed(1) 
+                      : 0;
+                    
+                    return (
+                      <>
+                        {filteredAtt.length > 0 && (
+                          <div className="mb-3 p-2 bg-sky-50 rounded text-sm">
+                            <span className="text-gray-700">Attendance Percentage: </span>
+                            <span className="text-sky-600 font-semibold">{percentage}%</span>
+                            <span className="text-gray-500 text-xs ml-2">
+                              ({presentCount} present / {filteredAtt.length} total)
+                            </span>
+                          </div>
+                        )}
+                        {filteredAtt.length > 0 ? (
+                          <div className="text-sm space-y-1 max-h-40 overflow-auto">
+                            {filteredAtt.slice(0, 10).map((att, idx) => (
+                              <div key={idx} className="flex justify-between">
+                                <span>{att.subject}</span>
+                                <span className={att.status === "present" ? "text-green-600" : "text-red-600"}>
+                                  {att.status}
+                                </span>
+                              </div>
+                            ))}
+                            {filteredAtt.length > 10 && (
+                              <p className="text-gray-500 text-xs mt-2">
+                                +{filteredAtt.length - 10} more records
+                              </p>
+                            )}
+                          </div>
+                        ) : (
+                          <p className="text-sm text-gray-500">
+                            {selectedDate ? "No attendance records for selected date" : "No attendance records"}
+                          </p>
+                        )}
+                      </>
+                    );
+                  })()}
+                </div>
+
+                {/* Approved Leaves Section */}
+                <div className="border rounded-lg p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h2 className="text-lg font-medium text-gray-700">
+                      Approved Leaves
+                    </h2>
+                    <button
+                      onClick={() => setShowLeaves(!showLeaves)}
+                      className="text-sm text-sky-600 hover:text-sky-700"
+                    >
+                      {showLeaves ? "Hide" : "View Approved Leaves"}
+                    </button>
+                  </div>
+                  {showLeaves && (
+                    <div>
+                      {(() => {
+                        const approvedLeaves = profile.leaves?.filter(
+                          (leave) => leave.finalStatus === "approved"
+                        ) || [];
+                        
+                        return approvedLeaves.length > 0 ? (
+                          <div className="space-y-2">
+                            {approvedLeaves.map((leave) => (
+                              <div key={leave._id} className="border rounded p-3 bg-green-50">
+                                <div className="text-sm">
+                                  <p className="font-medium text-gray-700">
+                                    {new Date(leave.fromDate).toLocaleDateString()} - {new Date(leave.toDate).toLocaleDateString()}
+                                  </p>
+                                  <p className="text-gray-600 mt-1">{leave.reason}</p>
+                                  <span className="inline-block mt-1 px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs">
+                                    Approved
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-sm text-gray-500">No approved leaves</p>
+                        );
+                      })()}
                     </div>
-                  ) : (
-                    <p className="text-sm text-gray-500">No attendance records</p>
                   )}
                 </div>
 

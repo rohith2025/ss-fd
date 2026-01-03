@@ -7,3 +7,4 @@ export const getStudentProfile = (studentId) =>
   api.get(`/hod/student/${studentId}`);
 
 
+
