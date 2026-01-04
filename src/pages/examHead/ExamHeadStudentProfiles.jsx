@@ -115,23 +115,78 @@ const ExamHeadStudentProfiles = () => {
 
                 {profile.grades && (
                   <div className="border rounded-lg p-4">
-                    <h2 className="text-lg font-medium text-gray-700 mb-3">
-                      Grades
-                    </h2>
-                    <div className="text-sm">
-                      <p>
-                        <span className="text-gray-500">Semester:</span>
-                        <span className="ml-2 text-gray-800">{profile.grades.semester}</span>
-                      </p>
-                      <p>
-                        <span className="text-gray-500">SGPA:</span>
-                        <span className="ml-2 text-gray-800">{profile.grades.sgpa}</span>
-                      </p>
-                      <p>
-                        <span className="text-gray-500">CGPA:</span>
-                        <span className="ml-2 text-gray-800">{profile.grades.cgpa}</span>
-                      </p>
+                    <div className="flex justify-between items-center mb-3">
+                      <h2 className="text-lg font-medium text-gray-700">
+                        Grades
+                      </h2>
+                      {profile.grades.cgpa && (
+                        <div className="text-right">
+                          <div className="text-sm text-gray-500">Overall CGPA</div>
+                          <div className="text-2xl font-bold text-sky-600">{profile.grades.cgpa}</div>
+                        </div>
+                      )}
                     </div>
+
+                    {profile.grades.semesters && profile.grades.semesters.length > 0 ? (
+                      <div className="space-y-3">
+                        {profile.grades.semesters
+                          .sort((a, b) => a.semester - b.semester)
+                          .map((semester) => (
+                          <div key={semester.semester} className="border rounded-lg p-3 bg-gray-50">
+                            <div className="flex justify-between items-center mb-2">
+                              <h3 className="font-medium text-gray-700">
+                                Semester {semester.semester}
+                              </h3>
+                              <div className="text-right">
+                                <div className="text-sm text-gray-500">SGPA</div>
+                                <div className="text-lg font-semibold text-sky-600">{semester.sgpa}</div>
+                              </div>
+                            </div>
+
+                            {semester.subjects && semester.subjects.length > 0 ? (
+                              <div className="mt-3">
+                                <table className="w-full text-sm">
+                                  <thead>
+                                    <tr className="border-b">
+                                      <th className="text-left py-1 text-gray-600">Subject</th>
+                                      <th className="text-center py-1 text-gray-600">Grade</th>
+                                      <th className="text-center py-1 text-gray-600">Credits</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {semester.subjects.map((subject, idx) => (
+                                      <tr key={idx} className="border-b border-gray-200">
+                                        <td className="py-1 text-gray-800">{subject.name}</td>
+                                        <td className="py-1 text-center font-medium">{subject.grade}</td>
+                                        <td className="py-1 text-center">{subject.credits}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            ) : (
+                              <p className="text-sm text-gray-500 mt-2">No subject details available</p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      // Fallback for old data format
+                      <div className="text-sm">
+                        <p>
+                          <span className="text-gray-500">Semester:</span>
+                          <span className="ml-2 text-gray-800">{profile.grades.semester}</span>
+                        </p>
+                        <p>
+                          <span className="text-gray-500">SGPA:</span>
+                          <span className="ml-2 text-gray-800">{profile.grades.sgpa}</span>
+                        </p>
+                        <p>
+                          <span className="text-gray-500">CGPA:</span>
+                          <span className="ml-2 text-gray-800">{profile.grades.cgpa}</span>
+                        </p>
+                      </div>
+                    )}
                   </div>
                 )}
 

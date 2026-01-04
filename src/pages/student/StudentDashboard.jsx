@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { getStudentDashboard } from "../../api/student.api";
 import { useAuth } from "../../context/AuthContext";
 import DashboardLayout from "../../components/DashboardLayout";
+import CgpaOverlay from "../../components/CgpaOverlay";
 
 const StudentDashboard = () => {
   const { role } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filteredAttendance, setFilteredAttendance] = useState([]);
+  const [showCgpaOverlay, setShowCgpaOverlay] = useState(false);
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -57,8 +59,9 @@ const StudentDashboard = () => {
         </p>
       </div>
 
-      <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-xl shadow-sm p-5">
+
+      <div className="p-6 flex flex-col lg:flex-row gap-6">
+        <div className="flex-1 bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Profile
           </h2>
@@ -73,7 +76,7 @@ const StudentDashboard = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-5">
+        <div className="flex-1 bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Attendance
           </h2>
@@ -85,26 +88,41 @@ const StudentDashboard = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-5">
-          <h2 className="text-lg font-medium text-gray-700 mb-2">
-            Grades
+        <div className="flex-1 bg-white rounded-xl shadow-sm p-5">
+          <h2 className="text-lg font-medium text-gray-700 mb-4">
+            Academic Performance
           </h2>
           {grades ? (
-            <>
-              <p className="text-sm text-gray-600">
-                SGPA: <span className="font-medium">{grades.sgpa}</span>
-              </p>
-              <p className="text-sm text-gray-600">
-                CGPA: <span className="font-medium">{grades.cgpa}</span>
-              </p>
-            </>
+            <div className="text-center">
+              <div
+                className={`p-6 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md ${
+                  showCgpaOverlay ? 'bg-sky-50 border-2 border-sky-300' : 'hover:bg-gray-50'
+                }`}
+                onClick={() => setShowCgpaOverlay(true)}
+              >
+                <div className="text-sm text-gray-500 mb-2">Current CGPA</div>
+                <div className="text-5xl font-bold text-sky-600 mb-2">{grades.cgpa || 'N/A'}</div>
+                <div className="text-xs text-gray-400">
+                  Click to view semester details
+                </div>
+              </div>
+            </div>
           ) : (
-            <p className="text-sm text-gray-500">
-              Grades not published yet
-            </p>
+            <div className="text-center py-8">
+              <p className="text-sm text-gray-500">
+                Grades not published yet
+              </p>
+            </div>
           )}
         </div>
       </div>
+
+      {/* CGPA Overlay */}
+      <CgpaOverlay
+        isOpen={showCgpaOverlay}
+        onClose={() => setShowCgpaOverlay(false)}
+        grades={grades}
+      />
     </DashboardLayout>
   );
 };
