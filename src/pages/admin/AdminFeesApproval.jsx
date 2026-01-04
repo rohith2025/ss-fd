@@ -3,21 +3,13 @@ import DashboardLayout from "../../components/DashboardLayout";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import api from "../../api/axios";
 
-const semesters = [
-  "sem1",
-  "sem2",
-  "sem3",
-  "sem4",
-  "sem5",
-  "sem6",
-  "sem7",
-  "sem8",
-];
+const semesters = ["sem1","sem2","sem3","sem4","sem5","sem6","sem7","sem8"];
 
 const AdminFeesApproval = () => {
   const [students, setStudents] = useState([]);
   const [studentId, setStudentId] = useState("");
   const [semester, setSemester] = useState("");
+  const [fees, setFees] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,34 +19,45 @@ const AdminFeesApproval = () => {
   const fetchStudents = async () => {
     try {
       const res = await api.get("/admin/users");
-      const onlyStudents = res.data.filter(
-        (u) => u.role === "student"
-      );
-      setStudents(onlyStudents);
+      setStudents(res.data.filter(u => u.role === "student"));
     } catch (err) {
-      console.error("Failed to fetch students");
+      console.error(err);
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchFees = async (id) => {
+    try {
+      const res = await api.get(`/fees/${id}`);
+      setFees(res.data);
+    } catch (err) {
+      console.error("Failed to fetch fees");
+      setFees(null);
+    }
+  };
+
+  const handleStudentSelect = (id) => {
+    setStudentId(id);
+    setSemester("");
+    setFees(null);
+    if (id) fetchFees(id);
   };
 
   const handleApprove = async (e) => {
     e.preventDefault();
 
     if (!studentId || !semester) {
-      alert("Please select student and semester");
+      alert("Select student & semester");
       return;
     }
 
     try {
-      await api.put(
-        `/fees/approve/${studentId}/${semester}`
-      );
-
-      alert(`${semester} approved successfully`);
+      await api.put(`/fees/approve/${studentId}/${semester}`);
+      alert(`${semester.toUpperCase()} approved`);
+      fetchFees(studentId);
       setSemester("");
     } catch (err) {
-      console.error("Failed to approve fees");
       alert("Approval failed");
     }
   };
@@ -62,61 +65,62 @@ const AdminFeesApproval = () => {
   return (
     <DashboardLayout>
       <div className="bg-white rounded-xl shadow-sm p-6">
-        <h1 className="text-xl font-semibold text-gray-800 mb-4">
-          Fees Approval
-        </h1>
+        <h1 className="text-xl font-semibold mb-6">Fees Approval</h1>
 
-        {loading ? (
-          <p className="text-gray-500 text-sm">
-            Loading students...
-          </p>
-        ) : (
-          <form
-            onSubmit={handleApprove}
-            className="space-y-5 max-w-md"
-          >
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Student
-              </label>
-              <SearchableDropdown
-                options={students}
-                value={studentId}
-                onChange={setStudentId}
-                placeholder="Search student by name or email..."
-                required
-              />
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <form onSubmit={handleApprove} className="space-y-4">
+            <SearchableDropdown
+              options={students}
+              value={studentId}
+              onChange={handleStudentSelect}
+              placeholder="Select student"
+            />
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Semester
-              </label>
-              <select
-                value={semester}
-                onChange={(e) =>
-                  setSemester(e.target.value)
-                }
-                required
-                className="w-full border rounded-md px-3 py-2 text-sm"
-              >
-                <option value="">Select semester</option>
-                {semesters.map((sem) => (
-                  <option key={sem} value={sem}>
-                    {sem.toUpperCase()}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <button
-              type="submit"
-              className="bg-sky-600 text-white px-5 py-2 rounded-md text-sm hover:bg-sky-700"
+            <select
+              value={semester}
+              onChange={(e) => setSemester(e.target.value)}
+              className="w-full border rounded px-3 py-2"
             >
+              <option value="">Select semester</option>
+              {semesters.map((s) => (
+                <option key={s} value={s}>{s.toUpperCase()}</option>
+              ))}
+            </select>
+            <div className="text-center">
+
+            <button className="bg-sky-600 text-white px-4 py-2 rounded">
               Approve Fee
             </button>
+            </div>
           </form>
-        )}
+
+          <div>
+            <h2 className="text-xl font-semibold mb-6">Fee Status</h2>
+
+            {!fees ? (
+              <p className="text-sm text-gray-500">
+                Select a student to view status
+              </p>
+            ) : (
+              <div className="border rounded divide-y">
+                {semesters.map((sem) => (
+                  <div key={sem} className="flex justify-between px-4 py-2">
+                    <span>{sem.toUpperCase()}</span>
+                    <span
+                      className={`text-xs px-3 py-1 rounded-full ${
+                        fees.semesters[sem]?.paid
+                          ? "bg-green-100 text-green-700"
+                          : "bg-yellow-100 text-yellow-700"
+                      }`}
+                    >
+                      {fees.semesters[sem]?.paid ? "PAID" : "PENDING"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </DashboardLayout>
   );
