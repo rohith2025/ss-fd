@@ -8,7 +8,6 @@ const HomeNavbar = () => {
   const [activeSection, setActiveSection] = useState("home");
   const isScrollingRef = useRef(false);
 
-  // ================= SUPER SMOOTH SCROLL =================
   const scrollToSection = (id) => {
     if (isScrollingRef.current) return;
 
