@@ -95,7 +95,7 @@ const StudentsOverlay = ({
                   onClick={() => setShowDownloadOptions(!showDownloadOptions)}
                   className="px-4 py-2 text-sm bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition"
                 >
-                  ⬇ Download
+                  📥 Download
                 </button>
 
                 {/* Dropdown */}
