@@ -3,7 +3,6 @@ import DashboardLayout from "../../components/DashboardLayout";
 import api from "../../api/axios";
 import { toast } from "react-toastify";
 
-
 const StudentThesis = () => {
   const [thesisList, setThesisList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,12 +11,27 @@ const StudentThesis = () => {
   const [title, setTitle] = useState("");
   const [fileUrl, setFileUrl] = useState("");
 
+  /* ================= FETCH MY THESIS ================= */
+  const fetchMyThesis = async () => {
+    try {
+      const res = await api.get("/thesis/my");
+      setThesisList(res.data || []);
+    } catch (err) {
+      console.error("Failed to fetch thesis");
+      toast.error("Failed to load thesis");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    setLoading(false);
+    fetchMyThesis();
   }, []);
 
+  /* ================= UPLOAD THESIS ================= */
   const handleUploadThesis = async (e) => {
     e.preventDefault();
+
     try {
       const res = await api.post("/thesis", {
         subject,
@@ -25,7 +39,11 @@ const StudentThesis = () => {
         fileUrl,
       });
 
-      setThesisList((prev) => [res.data.thesis, ...prev]);
+      // Add new thesis at top
+      setThesisList((prev) => [
+        res.data.thesis,
+        ...prev,
+      ]);
 
       toast.success("Thesis uploaded successfully");
 
@@ -34,7 +52,9 @@ const StudentThesis = () => {
       setFileUrl("");
     } catch (err) {
       console.error("Failed to upload thesis");
-      toast.error(err.response?.data?.message || "Failed to upload thesis");
+      toast.error(
+        err.response?.data?.message || "Failed to upload thesis"
+      );
     }
   };
 
@@ -45,9 +65,10 @@ const StudentThesis = () => {
           My Thesis
         </h1>
 
+        {/* ================= UPLOAD FORM ================= */}
         <form
           onSubmit={handleUploadThesis}
-          className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4"
+          className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4"
         >
           <input
             type="text"
@@ -84,6 +105,7 @@ const StudentThesis = () => {
           </button>
         </form>
 
+        {/* ================= THESIS LIST ================= */}
         {loading ? (
           <p className="text-gray-500 text-sm">
             Loading thesis...
@@ -97,7 +119,7 @@ const StudentThesis = () => {
             {thesisList.map((thesis) => (
               <div
                 key={thesis._id}
-                className="border rounded-lg p-4"
+                className="border rounded-lg p-4 hover:shadow-sm transition"
               >
                 <h2 className="text-gray-800 font-medium">
                   {thesis.title}
