@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import { createTimetable, getTeachersByBranch } from "../../api/timetable.api";
 import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify";
+
 
 const HodTimetable = () => {
   const { user } = useAuth();
@@ -81,13 +83,14 @@ const HodTimetable = () => {
         section,
         periods,
       });
-      alert("Timetable created successfully!");
+      toast.success("Timetable created successfully");
+
       setYear("");
       setSection("");
       setSlots({});
     } catch (err) {
       console.error("Failed to create timetable");
-      alert("Failed to create timetable");
+      toast.error(err.response?.data?.message || "Failed to create timetable");
     }
   };
 

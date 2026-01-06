@@ -102,7 +102,7 @@ const TeacherDashboard = () => {
       <div className="px-6 pb-6">
         <div className="bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-4">
-            Student Attendance Overview
+            Student's List
           </h2>
 
           {students?.length === 0 ? (
@@ -118,9 +118,6 @@ const TeacherDashboard = () => {
                 >
                   <p className="text-sm text-gray-700">
                     {s.studentName}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    {s.attendance.length} records
                   </p>
                 </div>
               ))}

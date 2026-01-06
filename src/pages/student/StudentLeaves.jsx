@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import api from "../../api/axios";
+import { toast } from "react-toastify";
+
 
 const StudentLeaves = () => {
   const [leaves, setLeaves] = useState([]);
@@ -33,12 +35,14 @@ const StudentLeaves = () => {
         toDate,
         reason,
       });
-
+      
+      toast.success("Leave applied successfully");
       setFromDate("");
       setToDate("");
       setReason("");
       fetchLeaves();
     } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to apply leave");
       console.error("Failed to apply leave");
     }
   };

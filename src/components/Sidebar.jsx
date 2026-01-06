@@ -4,9 +4,7 @@ import { useAuth } from "../context/AuthContext";
 const Sidebar = () => {
   const { role, logout } = useAuth();
 
-  if (!role) {
-    return null;
-  }
+  if (!role) return null;
 
   const linkClass = ({ isActive }) =>
     `block px-4 py-2 rounded-md text-sm ${
@@ -16,8 +14,16 @@ const Sidebar = () => {
     }`;
 
   return (
-    <aside className="w-64 bg-white shadow-sm min-h-screen p-4">
-
+    <aside
+      className="
+        fixed top-16 left-0
+        w-64 h-[calc(100vh-4rem)]
+        bg-white shadow-sm
+        p-4
+        overflow-y-auto
+        z-30
+      "
+    >
       {/* STUDENT */}
       {role === "student" && (
         <>
@@ -39,25 +45,23 @@ const Sidebar = () => {
         </>
       )}
 
-      {/* TEACHER / HOD */}
+      {/* TEACHER */}
       {role === "teacher" && (
         <>
           <NavLink to="/teacher/dashboard" className={linkClass}>Dashboard</NavLink>
           <NavLink to="/teacher/attendance" className={linkClass}>Attendance</NavLink>
           <NavLink to="/teacher/thesis" className={linkClass}>Student Thesis</NavLink>
-          <NavLink to="/teacher/timetable" className={linkClass}>TimeTable</NavLink>
-
+          <NavLink to="/teacher/timetable" className={linkClass}>Timetable</NavLink>
         </>
       )}
 
-      {/* HOD ONLY */}
+      {/* HOD */}
       {role === "hod" && (
         <>
-        <NavLink to="/teacher/dashboard" className={linkClass}>Dashboard</NavLink>
-        <NavLink to="/hod/leaves" className={linkClass}>Leave Approvals</NavLink>
-        <NavLink to="/hod/students" className={linkClass}>Student Profiles</NavLink>
-        <NavLink to="/hod/timetable" className={linkClass}>TimeTable</NavLink>
-        
+          <NavLink to="/teacher/dashboard" className={linkClass}>Dashboard</NavLink>
+          <NavLink to="/hod/leaves" className={linkClass}>Leave Approvals</NavLink>
+          <NavLink to="/hod/students" className={linkClass}>Student Profiles</NavLink>
+          <NavLink to="/hod/timetable" className={linkClass}>Timetable</NavLink>
         </>
       )}
 

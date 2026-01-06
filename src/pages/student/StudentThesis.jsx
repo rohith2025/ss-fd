@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import api from "../../api/axios";
+import { toast } from "react-toastify";
+
 
 const StudentThesis = () => {
   const [thesisList, setThesisList] = useState([]);
@@ -25,11 +27,14 @@ const StudentThesis = () => {
 
       setThesisList((prev) => [res.data.thesis, ...prev]);
 
+      toast.success("Thesis uploaded successfully");
+
       setSubject("");
       setTitle("");
       setFileUrl("");
     } catch (err) {
       console.error("Failed to upload thesis");
+      toast.error(err.response?.data?.message || "Failed to upload thesis");
     }
   };
 

@@ -1,6 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Home from "./pages/Home";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+
 
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -44,6 +47,17 @@ import Unauthorized from "./pages/Unauthorized";
 
 const App = () => {
   return (
+    <>
+    <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        theme="light"
+      />
+
     <Routes>
       {/* ========= PUBLIC ========= */}
       <Route path="/" element={<Home />} />
@@ -218,6 +232,7 @@ const App = () => {
       {/* ========= FALLBACK ========= */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </>
   );
 };
 

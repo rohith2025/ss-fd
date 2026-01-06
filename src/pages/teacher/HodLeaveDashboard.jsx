@@ -1,19 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef} from "react";
 import api from "../../api/axios";
 import DashboardLayout from "../../components/DashboardLayout";
+import { toast } from "react-toastify";
+
 
 
 const HodLeaveDashboard = () => {
   const [leaves, setLeaves] = useState([]);
   const [loading, setLoading] = useState(true);
+  const toastShown = useRef(false)
 
   useEffect(() => {
     const fetchLeaves = async () => {
       try {
         const res = await api.get("/leaves/hod");
         setLeaves(res.data || []);
+        if ((!res.data || res.data.length === 0) && !toastShown.current ) {
+        toast.info("No pending leave approvals");
+        toastShown.current = true;
+      }
       } catch (err) {
         console.error("Failed to load HOD leave requests");
+        toast.error("Failed to load leave requests");
       } finally {
         setLoading(false);
       }
@@ -33,8 +41,14 @@ const HodLeaveDashboard = () => {
             : leave
         )
       );
+      toast.success(
+      status === "approved"
+        ? "Leave approved successfully"
+        : "Leave rejected successfully"
+    );
     } catch (err) {
       console.error("Failed to update leave");
+      toast.error("Failed to update leave status");
     }
   };
 

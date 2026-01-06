@@ -11,7 +11,17 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+    <header
+      className="
+        fixed top-0 left-0 right-0
+        h-16
+        bg-white
+        shadow-sm
+        px-6
+        flex justify-between items-center
+        z-40
+      "
+    >
       <h1 className="text-lg font-semibold text-sky-600">
         ShikshaSetu
       </h1>
@@ -29,7 +39,7 @@ const Navbar = () => {
           Logout
         </button>
       </div>
-    </div>
+    </header>
   );
 };
 

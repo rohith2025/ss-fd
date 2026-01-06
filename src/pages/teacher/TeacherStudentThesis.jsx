@@ -1,13 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import api from "../../api/axios";
+import { toast } from "react-toastify";
+
 
 const TeacherStudentThesis = () => {
   const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState("");
   const [thesisList, setThesisList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const noThesisToastShown = useRef(false);
+
 
   useEffect(() => {
     fetchStudents();
@@ -24,14 +28,26 @@ const TeacherStudentThesis = () => {
     }
   };
 
-  const fetchStudentThesis = async (studentId) => {
-    try {
-      const res = await api.get(`/thesis/student/${studentId}`);
-      setThesisList(res.data || []);
-    } catch (err) {
-      console.error("Failed to fetch thesis");
+const fetchStudentThesis = async (studentId) => {
+  try {
+    const res = await api.get(`/thesis/student/${studentId}`);
+    const list = res.data || [];
+    setThesisList(list);
+
+    if (list.length === 0 && !noThesisToastShown.current) {
+      toast.info("No thesis uploaded by this student");
+      noThesisToastShown.current = true;
+    } 
+    else if (list.length > 0) {
+      toast.success("Thesis records loaded successfully");
+      noThesisToastShown.current = false; 
     }
-  };
+  } catch (err) {
+    console.error("Failed to fetch thesis");
+    toast.error("Failed to load thesis");
+  }
+};
+
 
   return (
     <DashboardLayout>

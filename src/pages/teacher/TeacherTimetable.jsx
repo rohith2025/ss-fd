@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import { getTeacherTimetable } from "../../api/timetable.api";
+import { toast } from "react-toastify";
 
 const TeacherTimetable = () => {
   const [slots, setSlots] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const noTimetableToastShown = useRef(false);
 
   useEffect(() => {
     fetchTimetable();
@@ -13,13 +16,26 @@ const TeacherTimetable = () => {
   const fetchTimetable = async () => {
     try {
       const res = await getTeacherTimetable();
-      setSlots(res.data || []);
+      const data = res.data || [];
+      setSlots(data);
+
+      if (data.length === 0 && !noTimetableToastShown.current) {
+        toast.info("No timetable assigned yet");
+        noTimetableToastShown.current = true;
+      }
+
+      if (data.length > 0 && !noTimetableToastShown.current) {
+        toast.success("Timetable loaded successfully");
+        noTimetableToastShown.current = true;
+      }
     } catch (err) {
       console.error("Failed to fetch timetable");
+      toast.error("Failed to load timetable");
     } finally {
       setLoading(false);
     }
   };
+
 
   const groupedSlots = slots.reduce((acc, slot) => {
     if (!acc[slot.day]) {

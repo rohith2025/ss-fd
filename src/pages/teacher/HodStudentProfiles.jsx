@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import { getLinkedStudents, getStudentProfile } from "../../api/hod.api";
+import { toast } from "react-toastify";
+
 
 const HodStudentProfiles = () => {
   const [students, setStudents] = useState([]);
@@ -33,8 +35,11 @@ const HodStudentProfiles = () => {
     try {
       const res = await getStudentProfile(studentId);
       setProfile(res.data);
+      toast.success("Student profile loaded");
+
     } catch (err) {
       console.error("Failed to fetch student profile");
+      toast.error("Failed to load student profile");
     } finally {
       setProfileLoading(false);
     }

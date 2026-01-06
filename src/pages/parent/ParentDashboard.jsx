@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 import DashboardLayout from "../../components/DashboardLayout";
+import { toast } from "react-toastify";
+
 
 
 const ParentDashboard = () => {
@@ -37,7 +39,14 @@ const ParentDashboard = () => {
             : leave
         )
       );
+        toast.success(
+      status === "approved"
+        ? "Leave approved successfully"
+        : "Leave rejected successfully"
+    );
+
     } catch (err) {
+      toast.error("Failed to update leave status");
       console.error("Failed to update leave");
     }
   };
