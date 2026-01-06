@@ -85,17 +85,6 @@ const StudentAttendance = () => {
               }}
               className="border rounded-md px-3 py-2 text-sm"
             />
-            <select
-              value={selectedDay}
-              onChange={(e) => setSelectedDay(e.target.value)}
-              className="border rounded-md px-3 py-2 text-sm"
-            >
-              {days.map((day) => (
-                <option key={day} value={day}>
-                  {day}
-                </option>
-              ))}
-            </select>
           </div>
         </div>
 

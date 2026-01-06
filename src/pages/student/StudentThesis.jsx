@@ -7,9 +7,13 @@ const StudentThesis = () => {
   const [thesisList, setThesisList] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Form state
   const [subject, setSubject] = useState("");
   const [title, setTitle] = useState("");
   const [fileUrl, setFileUrl] = useState("");
+
+  // 🔍 Search
+  const [search, setSearch] = useState("");
 
   /* ================= FETCH MY THESIS ================= */
   const fetchMyThesis = async () => {
@@ -39,11 +43,8 @@ const StudentThesis = () => {
         fileUrl,
       });
 
-      // Add new thesis at top
-      setThesisList((prev) => [
-        res.data.thesis,
-        ...prev,
-      ]);
+      // Add new thesis on top
+      setThesisList((prev) => [res.data.thesis, ...prev]);
 
       toast.success("Thesis uploaded successfully");
 
@@ -57,6 +58,13 @@ const StudentThesis = () => {
       );
     }
   };
+
+  /* ================= FILTERED LIST ================= */
+  const filteredThesis = thesisList.filter(
+    (t) =>
+      t.title.toLowerCase().includes(search.toLowerCase()) ||
+      t.subject.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <DashboardLayout>
@@ -105,18 +113,27 @@ const StudentThesis = () => {
           </button>
         </form>
 
+        {/* ================= SEARCH ================= */}
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search by title or subject..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="border rounded-md px-3 py-2 text-sm w-full md:w-1/2"
+          />
+        </div>
+
         {/* ================= THESIS LIST ================= */}
         {loading ? (
+          <p className="text-gray-500 text-sm">Loading thesis...</p>
+        ) : filteredThesis.length === 0 ? (
           <p className="text-gray-500 text-sm">
-            Loading thesis...
-          </p>
-        ) : thesisList.length === 0 ? (
-          <p className="text-gray-500 text-sm">
-            No thesis uploaded yet
+            No thesis found
           </p>
         ) : (
           <div className="space-y-4">
-            {thesisList.map((thesis) => (
+            {filteredThesis.map((thesis) => (
               <div
                 key={thesis._id}
                 className="border rounded-lg p-4 hover:shadow-sm transition"

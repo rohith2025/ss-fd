@@ -1,8 +1,9 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { getStudentDashboard } from "../../api/student.api";
 import { useAuth } from "../../context/AuthContext";
 import DashboardLayout from "../../components/DashboardLayout";
 import CgpaOverlay from "../../components/CgpaOverlay";
+import AttendanceOverlay from "../../components/AttendanceOverlay";
 
 const StudentDashboard = () => {
   const { role } = useAuth();
@@ -10,13 +11,13 @@ const StudentDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [filteredAttendance, setFilteredAttendance] = useState([]);
   const [showCgpaOverlay, setShowCgpaOverlay] = useState(false);
+  const [showAttendanceOverlay, setShowAttendanceOverlay] = useState(false);
 
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
         const res = await getStudentDashboard();
         setData(res.data);
-
         setFilteredAttendance(res.data?.attendance || []);
       } catch (error) {
         console.error("Failed to load dashboard", error);
@@ -37,19 +38,16 @@ const StudentDashboard = () => {
   }
 
   const calculatePercentage = () => {
-    if (!filteredAttendance || filteredAttendance.length === 0) return "0.0";
-
-    const presentCount = filteredAttendance.filter(
-      (item) => item.status === "present"
-    ).length;
-
-    return ((presentCount / filteredAttendance.length) * 100).toFixed(1);
+    if (!filteredAttendance.length) return "0.0";
+    const present = filteredAttendance.filter(a => a.status === "present").length;
+    return ((present / filteredAttendance.length) * 100).toFixed(1);
   };
 
   const { student, attendance, grades } = data || {};
 
   return (
     <DashboardLayout>
+      {/* Header */}
       <div className="bg-white shadow-sm px-6 py-4">
         <h1 className="text-xl font-semibold text-gray-800">
           Student Dashboard
@@ -59,69 +57,87 @@ const StudentDashboard = () => {
         </p>
       </div>
 
-
+      {/* Cards */}
       <div className="p-6 flex flex-col lg:flex-row gap-6">
+        {/* Profile */}
         <div className="flex-1 bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Profile
           </h2>
-          <p className="text-sm text-gray-600">
-            Branch: {student?.branch}
-          </p>
-          <p className="text-sm text-gray-600">
-            Year: {student?.year}
-          </p>
-          <p className="text-sm text-gray-600">
-            Section: {student?.section}
-          </p>
+          <p className="text-sm text-gray-600">Branch: {student?.branch}</p>
+          <p className="text-sm text-gray-600">Year: {student?.year}</p>
+          <p className="text-sm text-gray-600">Section: {student?.section}</p>
         </div>
 
-        <div className="flex-1 bg-white rounded-xl shadow-sm p-5">
-          <h2 className="text-lg font-medium text-gray-700 mb-2">
-            Attendance
-          </h2>
-          <p className="text-3xl font-semibold text-sky-600">
+      {/* Attendance */}
+      <div className="flex-1 bg-white rounded-xl shadow-sm p-5">
+        <h2 className="text-lg font-medium text-gray-700 mb-4">
+          Attendance
+        </h2>
+
+        <div
+          onClick={() => setShowAttendanceOverlay(true)}
+          className="p-6 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md hover:bg-gray-50 text-center"
+        >
+          <div className="text-sm text-gray-500 mb-2">
+            Overall Attendance
+          </div>
+
+          <div className="text-5xl font-bold text-sky-600 mb-2">
             {calculatePercentage()}%
-          </p>
-          <p className="text-sm text-gray-500">
-            Total Records: {filteredAttendance.length}
-          </p>
-        </div>
+          </div>
 
+          <div className="text-xs text-gray-400">
+            Total Records: {filteredAttendance.length}
+          </div>
+
+          <div className="text-xs text-gray-400 mt-1">
+            Click to view details
+          </div>
+        </div>
+      </div>
+
+
+        {/* CGPA */}
         <div className="flex-1 bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-4">
             Academic Performance
           </h2>
+
           {grades ? (
-            <div className="text-center">
-              <div
-                className={`p-6 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md ${
-                  showCgpaOverlay ? 'bg-sky-50 border-2 border-sky-300' : 'hover:bg-gray-50'
-                }`}
-                onClick={() => setShowCgpaOverlay(true)}
-              >
-                <div className="text-sm text-gray-500 mb-2">Current CGPA</div>
-                <div className="text-5xl font-bold text-sky-600 mb-2">{grades.cgpa || 'N/A'}</div>
-                <div className="text-xs text-gray-400">
-                  Click to view semester details
-                </div>
+            <div
+              onClick={() => setShowCgpaOverlay(true)}
+              className="p-6 rounded-lg cursor-pointer transition hover:shadow-md hover:bg-gray-50 text-center"
+            >
+              <div className="text-sm text-gray-500 mb-2">
+                Current CGPA
+              </div>
+              <div className="text-5xl font-bold text-sky-600 mb-2">
+                {grades.cgpa || "N/A"}
+              </div>
+              <div className="text-xs text-gray-400">
+                Click to view semester details
               </div>
             </div>
           ) : (
-            <div className="text-center py-8">
-              <p className="text-sm text-gray-500">
-                Grades not published yet
-              </p>
-            </div>
+            <p className="text-sm text-gray-500 text-center">
+              Grades not published yet
+            </p>
           )}
         </div>
       </div>
 
-      {/* CGPA Overlay */}
+      {/* Overlays */}
       <CgpaOverlay
         isOpen={showCgpaOverlay}
         onClose={() => setShowCgpaOverlay(false)}
         grades={grades}
+      />
+
+      <AttendanceOverlay
+        isOpen={showAttendanceOverlay}
+        onClose={() => setShowAttendanceOverlay(false)}
+        attendance={attendance}
       />
     </DashboardLayout>
   );
