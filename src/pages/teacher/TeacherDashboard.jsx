@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { getTeacherDashboard } from "../../api/teacher.api";
 import { useAuth } from "../../context/AuthContext";
 import DashboardLayout from "../../components/DashboardLayout";
-
+import StudentsOverlay from "../../components/StudentsOverlay";
 
 const TeacherDashboard = () => {
   const { role } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showStudentsOverlay, setShowStudentsOverlay] = useState(false);
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -15,7 +16,7 @@ const TeacherDashboard = () => {
         const res = await getTeacherDashboard();
         setData(res.data);
       } catch (err) {
-        console.error("Failed to load teacher dashboard");
+        console.error("Failed to load teacher dashboard", err);
       } finally {
         setLoading(false);
       }
@@ -31,10 +32,12 @@ const TeacherDashboard = () => {
     );
   }
 
-  const { teacher, students } = data || {};
+  const teacher = data?.teacher;
+  const students = data?.students || [];
 
   return (
     <DashboardLayout>
+      {/* Header */}
       <div className="bg-white shadow-sm px-6 py-4">
         <h1 className="text-xl font-semibold text-gray-800">
           Teacher Dashboard
@@ -44,7 +47,9 @@ const TeacherDashboard = () => {
         </p>
       </div>
 
+      {/* Cards */}
       <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Profile */}
         <div className="bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Profile
@@ -59,18 +64,26 @@ const TeacherDashboard = () => {
           )}
         </div>
 
+        {/* Linked Students (CLICKABLE) */}
         <div className="bg-white rounded-xl shadow-sm p-5">
-          <h2 className="text-lg font-medium text-gray-700 mb-2">
+          <h2 className="text-lg font-medium text-gray-700 mb-4">
             Linked Students
           </h2>
-          <p className="text-3xl font-semibold text-sky-600">
-            {students?.length || 0}
-          </p>
-          <p className="text-sm text-gray-500">
-            Students under you
-          </p>
+
+          <div
+            onClick={() => setShowStudentsOverlay(true)}
+            className="p-6 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md hover:bg-gray-50 text-center"
+          >
+            <div className="text-5xl font-bold text-sky-600 mb-2">
+              {students.length}
+            </div>
+            <div className="text-sm text-gray-500">
+              Click to view student list
+            </div>
+          </div>
         </div>
 
+        {/* Role Access */}
         <div className="bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Role Access
@@ -99,32 +112,13 @@ const TeacherDashboard = () => {
         </div>
       </div>
 
-      <div className="px-6 pb-6">
-        <div className="bg-white rounded-xl shadow-sm p-5">
-          <h2 className="text-lg font-medium text-gray-700 mb-4">
-            Student's List
-          </h2>
-
-          {students?.length === 0 ? (
-            <p className="text-sm text-gray-500">
-              No students linked yet
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {students.map((s, index) => (
-                <div
-                  key={index}
-                  className="flex justify-between items-center border-b pb-2"
-                >
-                  <p className="text-sm text-gray-700">
-                    {s.studentName}
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
+      {/* ✅ STUDENTS OVERLAY */}
+      <StudentsOverlay
+        isOpen={showStudentsOverlay}
+        onClose={() => setShowStudentsOverlay(false)}
+        students={students}
+        title="Linked Students"
+      />
     </DashboardLayout>
   );
 };
