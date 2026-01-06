@@ -7,27 +7,45 @@ import {
 } from "../../api/attendance.api";
 import { toast } from "react-toastify";
 
+const StatusBadge = ({ status }) => {
+  const styles = {
+    present: "bg-green-100 text-green-700",
+    absent: "bg-red-100 text-red-700",
+  };
+
+  return (
+    <span
+      className={`px-3 py-1 rounded-full text-xs font-medium ${
+        styles[status] || styles.pending
+      }`}
+    >
+      {status.charAt(0).toUpperCase() + status.slice(1)}
+    </span>
+  );
+};
+
 const TeacherAttendance = () => {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  // Step 1
+  // STEP 1
   const [selectedDate, setSelectedDate] = useState("");
   const [dayOfWeek, setDayOfWeek] = useState("");
 
-  // Step 2
+  // STEP 2
   const [availableClasses, setAvailableClasses] = useState([]);
   const [selectedClass, setSelectedClass] = useState(null);
 
-  // Step 3
+  // STEP 3
   const [students, setStudents] = useState([]);
   const [attendanceData, setAttendanceData] = useState({});
-  const [searchTerm, setSearchTerm] = useState(""); // ✅ added
+  const [searchTerm, setSearchTerm] = useState("");
 
+  /* ================= DATE HANDLER ================= */
   const handleDateChange = (date) => {
     setSelectedDate(date);
     if (date) {
-      const dayName = new Date(date).toLocaleDateString("en-US", {
+      const dayName = new Date(date).toLocaleDateString("en-IN", {
         weekday: "long",
       });
       setDayOfWeek(dayName);
@@ -36,6 +54,7 @@ const TeacherAttendance = () => {
     }
   };
 
+  /* ================= FETCH CLASSES ================= */
   const handleFetchClasses = async () => {
     if (!selectedDate) {
       toast.error("Please select a date");
@@ -54,6 +73,7 @@ const TeacherAttendance = () => {
     }
   };
 
+  /* ================= SELECT CLASS ================= */
   const handleClassSelect = async (classItem) => {
     setSelectedClass(classItem);
     setLoading(true);
@@ -68,6 +88,7 @@ const TeacherAttendance = () => {
       const studentList = res.data || [];
       setStudents(studentList);
 
+      // Default status → present (can be changed to pending later)
       const init = {};
       studentList.forEach((s) => (init[s._id] = "present"));
       setAttendanceData(init);
@@ -81,10 +102,12 @@ const TeacherAttendance = () => {
     }
   };
 
+  /* ================= UPDATE STATUS ================= */
   const handleAttendanceChange = (id, status) => {
     setAttendanceData((prev) => ({ ...prev, [id]: status }));
   };
 
+  /* ================= SUBMIT ================= */
   const handleMarkAttendance = async () => {
     setLoading(true);
     try {
@@ -103,13 +126,6 @@ const TeacherAttendance = () => {
       });
 
       toast.success("Attendance marked successfully");
-      setStep(1);
-      setSelectedDate("");
-      setDayOfWeek("");
-      setAvailableClasses([]);
-      setSelectedClass(null);
-      setStudents([]);
-      setAttendanceData({});
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to mark attendance");
     } finally {
@@ -117,6 +133,7 @@ const TeacherAttendance = () => {
     }
   };
 
+  /* ================= BACK ================= */
   const handleBack = () => {
     if (step === 2) {
       setStep(1);
@@ -129,7 +146,7 @@ const TeacherAttendance = () => {
     }
   };
 
-  // ✅ Filtered list (UI only)
+  /* ================= FILTER ================= */
   const filteredStudents = students.filter((s) =>
     s.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -137,10 +154,14 @@ const TeacherAttendance = () => {
   return (
     <DashboardLayout>
       <div className="bg-white rounded-xl shadow-sm p-6">
+        {/* HEADER */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-xl font-semibold">Mark Attendance</h1>
           {step > 1 && (
-            <button onClick={handleBack} className="border px-4 py-2 rounded">
+            <button
+              onClick={handleBack}
+              className="border px-4 py-2 rounded text-sm"
+            >
               Back
             </button>
           )}
@@ -151,7 +172,7 @@ const TeacherAttendance = () => {
           {[1, 2, 3].map((n) => (
             <div key={n} className="flex items-center">
               <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
                   step >= n ? "bg-sky-600 text-white" : "bg-gray-200"
                 }`}
               >
@@ -168,17 +189,18 @@ const TeacherAttendance = () => {
           ))}
         </div>
 
-        {/* STEP 1 */}
+        {/* ================= STEP 1 ================= */}
         {step === 1 && (
           <div className="space-y-4">
             <input
               type="date"
               value={selectedDate}
-              min={new Date().toISOString().split("T")[0]}
               onChange={(e) => handleDateChange(e.target.value)}
               className="border px-3 py-2 w-full rounded"
             />
-            {dayOfWeek && <p className="text-blue-700">Day: {dayOfWeek}</p>}
+            {dayOfWeek && (
+              <p className="text-sky-700 font-medium">Day: {dayOfWeek}</p>
+            )}
             <button
               onClick={handleFetchClasses}
               className="w-full bg-sky-600 text-white py-2 rounded"
@@ -188,16 +210,16 @@ const TeacherAttendance = () => {
           </div>
         )}
 
-        {/* STEP 2 */}
+        {/* ================= STEP 2 ================= */}
         {step === 2 && (
           <div className="grid gap-3">
             {availableClasses.map((c, i) => (
               <div
                 key={i}
                 onClick={() => handleClassSelect(c)}
-                className="border p-4 rounded cursor-pointer"
+                className="border p-4 rounded cursor-pointer hover:bg-sky-50"
               >
-                <h4>{c.subject}</h4>
+                <h4 className="font-medium">{c.subject}</h4>
                 <p className="text-sm text-gray-600">
                   Year {c.year} • Section {c.section} • {c.timeSlot}
                 </p>
@@ -206,10 +228,10 @@ const TeacherAttendance = () => {
           </div>
         )}
 
-        {/* STEP 3 */}
+        {/* ================= STEP 3 ================= */}
         {step === 3 && (
           <div className="space-y-4">
-            {/* 🔍 SEARCH */}
+            {/* SEARCH */}
             <input
               type="text"
               placeholder="Search student by name..."
@@ -220,7 +242,10 @@ const TeacherAttendance = () => {
 
             <div className="border rounded max-h-96 overflow-y-auto">
               {filteredStudents.map((s) => (
-                <div key={s._id} className="border-b p-3 flex justify-between">
+                <div
+                  key={s._id}
+                  className="border-b p-3 flex justify-between items-center"
+                >
                   <div>
                     <p className="font-medium">{s.name}</p>
                     {s.rollNo && (
@@ -229,27 +254,34 @@ const TeacherAttendance = () => {
                       </p>
                     )}
                   </div>
-                  <div className="flex gap-4">
-                    <label>
-                      <input
-                        type="radio"
-                        checked={attendanceData[s._id] === "present"}
-                        onChange={() =>
-                          handleAttendanceChange(s._id, "present")
-                        }
-                      />{" "}
-                      Present
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        checked={attendanceData[s._id] === "absent"}
-                        onChange={() =>
-                          handleAttendanceChange(s._id, "absent")
-                        }
-                      />{" "}
-                      Absent
-                    </label>
+
+                  <div className="flex items-center gap-6">
+                    {/* STATUS BADGE */}
+                    <StatusBadge status={attendanceData[s._id]} />
+
+                    {/* CONTROLS */}
+                    <div className="flex gap-4 text-sm">
+                      <label className="flex items-center gap-1">
+                        <input
+                          type="radio"
+                          checked={attendanceData[s._id] === "present"}
+                          onChange={() =>
+                            handleAttendanceChange(s._id, "present")
+                          }
+                        />
+                        Present
+                      </label>
+                      <label className="flex items-center gap-1">
+                        <input
+                          type="radio"
+                          checked={attendanceData[s._id] === "absent"}
+                          onChange={() =>
+                            handleAttendanceChange(s._id, "absent")
+                          }
+                        />
+                        Absent
+                      </label>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -257,7 +289,8 @@ const TeacherAttendance = () => {
 
             <button
               onClick={handleMarkAttendance}
-              className="w-full bg-green-600 text-white py-3 rounded"
+              disabled={loading}
+              className="w-full bg-green-600 text-white py-3 rounded disabled:opacity-50"
             >
               Mark Attendance ({students.length})
             </button>

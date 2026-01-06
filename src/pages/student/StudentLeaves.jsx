@@ -3,7 +3,6 @@ import DashboardLayout from "../../components/DashboardLayout";
 import api from "../../api/axios";
 import { toast } from "react-toastify";
 
-
 const StudentLeaves = () => {
   const [leaves, setLeaves] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,6 +10,10 @@ const StudentLeaves = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [reason, setReason] = useState("");
+
+  // 🔍 FILTER STATES
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState("");
 
   useEffect(() => {
     fetchLeaves();
@@ -35,7 +38,7 @@ const StudentLeaves = () => {
         toDate,
         reason,
       });
-      
+
       toast.success("Leave applied successfully");
       setFromDate("");
       setToDate("");
@@ -43,9 +46,28 @@ const StudentLeaves = () => {
       fetchLeaves();
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to apply leave");
-      console.error("Failed to apply leave");
     }
   };
+
+  // 📅 GET UNIQUE YEARS FROM LEAVES
+  const years = [
+    ...new Set(
+      leaves.map((l) => new Date(l.fromDate).getFullYear())
+    ),
+  ];
+
+  // 🔎 FILTER LOGIC
+  const filteredLeaves = leaves.filter((leave) => {
+    const date = new Date(leave.fromDate);
+    const monthMatch =
+      selectedMonth === "" ||
+      date.getMonth() + 1 === Number(selectedMonth);
+    const yearMatch =
+      selectedYear === "" ||
+      date.getFullYear() === Number(selectedYear);
+
+    return monthMatch && yearMatch;
+  });
 
   return (
     <DashboardLayout>
@@ -54,6 +76,7 @@ const StudentLeaves = () => {
           Leave Requests
         </h1>
 
+        {/* ================= APPLY LEAVE ================= */}
         <form
           onSubmit={handleApplyLeave}
           className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4"
@@ -91,15 +114,51 @@ const StudentLeaves = () => {
           </button>
         </form>
 
+        {/* ================= FILTERS ================= */}
+        {!loading && leaves.length > 0 && (
+          <div className="flex flex-wrap gap-4 mb-5">
+            <select
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="border rounded-md px-3 py-2 text-sm"
+            >
+              <option value="">All Months</option>
+              {Array.from({ length: 12 }).map((_, i) => (
+                <option key={i} value={i + 1}>
+                  {new Date(0, i).toLocaleString("en-IN", {
+                    month: "long",
+                  })}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+              className="border rounded-md px-3 py-2 text-sm"
+            >
+              <option value="">All Years</option>
+              {years.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* ================= LEAVE LIST ================= */}
         {loading ? (
-          <p className="text-gray-500 text-sm">Loading leave history...</p>
-        ) : leaves.length === 0 ? (
+          <p className="text-gray-500 text-sm">
+            Loading leave history...
+          </p>
+        ) : filteredLeaves.length === 0 ? (
           <p className="text-gray-500 text-sm">
             No leave requests found
           </p>
         ) : (
           <div className="space-y-3">
-            {leaves.map((leave) => (
+            {filteredLeaves.map((leave) => (
               <div
                 key={leave._id}
                 className="border rounded-lg p-4"
@@ -111,7 +170,7 @@ const StudentLeaves = () => {
                   </p>
 
                   <span
-                    className={`text-xs px-3 py-1 rounded-full ${
+                    className={`text-xs px-3 py-1 rounded-full capitalize ${
                       leave.finalStatus === "approved"
                         ? "bg-green-100 text-green-700"
                         : leave.finalStatus === "rejected"

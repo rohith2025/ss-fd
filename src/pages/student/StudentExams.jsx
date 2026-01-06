@@ -5,6 +5,7 @@ import api from "../../api/axios";
 const StudentExams = () => {
   const [exams, setExams] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState(""); 
 
   useEffect(() => {
     fetchExams();
@@ -23,8 +24,7 @@ const StudentExams = () => {
 
   const formatDate = (date) => {
     if (!date) return "—";
-    const d = new Date(date);
-    return d.toLocaleDateString("en-IN", {
+    return new Date(date).toLocaleDateString("en-IN", {
       day: "2-digit",
       month: "short",
       year: "numeric",
@@ -38,6 +38,10 @@ const StudentExams = () => {
     });
   };
 
+  const filteredExams = exams.filter((exam) =>
+    exam.title.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <DashboardLayout>
       <div className="bg-white rounded-xl shadow-sm p-6">
@@ -45,18 +49,30 @@ const StudentExams = () => {
           My Exams
         </h1>
 
+        {!loading && exams.length > 0 && (
+          <input
+            type="text"
+            placeholder="Search exam by name..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="mb-4 w-full max-w-md border rounded-md px-3 py-2 text-sm"
+          />
+        )}
+
         {loading ? (
           <p className="text-gray-500 text-sm">Loading exams...</p>
-        ) : exams.length === 0 ? (
+        ) : filteredExams.length === 0 ? (
           <p className="text-gray-500 text-sm">
-            No exams scheduled
+            {exams.length === 0
+              ? "No exams scheduled"
+              : "No exams match your search"}
           </p>
         ) : (
           <div className="space-y-4">
-            {exams.map((exam) => (
+            {filteredExams.map((exam) => (
               <div
                 key={exam._id}
-                className="border rounded-lg p-4"
+                className="border rounded-lg p-4 hover:shadow-sm transition"
               >
                 <div className="flex justify-between items-center">
                   <h2 className="text-gray-800 font-medium">
@@ -88,7 +104,7 @@ const StudentExams = () => {
                   Timing: {exam.timing}
                 </p>
 
-                <div className="mt-2 space-x-3">
+                <div className="mt-2 flex flex-wrap gap-3">
                   {exam.syllabusFile && (
                     <a
                       href={exam.syllabusFile}
@@ -100,18 +116,17 @@ const StudentExams = () => {
                     </a>
                   )}
 
-                  {exam.pyqFiles &&
-                    exam.pyqFiles.map((file, index) => (
-                      <a
-                        key={index}
-                        href={file}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-sky-600 hover:underline"
-                      >
-                        PYQ {index + 1}
-                      </a>
-                    ))}
+                  {exam.pyqFiles?.map((file, index) => (
+                    <a
+                      key={index}
+                      href={file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-sky-600 hover:underline"
+                    >
+                      PYQ {index + 1}
+                    </a>
+                  ))}
                 </div>
               </div>
             ))}
