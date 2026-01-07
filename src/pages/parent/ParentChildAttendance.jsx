@@ -1,45 +1,58 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import api from "../../api/axios";
+import { toast } from "react-toastify";
 
 const ParentChildAttendance = () => {
   const [attendance, setAttendance] = useState([]);
+  const [child, setChild] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchAttendance();
-  }, []);
-
-  const fetchAttendance = async () => {
+  /* ================= FETCH LINKED CHILD ================= */
+  const fetchChildAndAttendance = async () => {
     try {
-      const studentId = localStorage.getItem("studentId");
+      // 1️⃣ Get linked child
+      const childRes = await api.get("/parent/child");
 
-      if (!studentId) {
-        console.error("Student ID not found for parent");
+      if (!childRes.data?.child) {
+        toast.error("No child linked to this parent");
         setLoading(false);
         return;
       }
 
-      const res = await api.get(`/parent/attendance/${studentId}`);
-      setAttendance(res.data || []);
+      const studentId = childRes.data.child._id;
+      setChild(childRes.data.child);
+
+      // 2️⃣ Fetch attendance
+      const attRes = await api.get(`/parent/attendance/${studentId}`);
+      setAttendance(attRes.data || []);
     } catch (err) {
-      console.error("Failed to fetch child attendance", err);
+      console.error(err);
+      toast.error("Failed to load child attendance");
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchChildAndAttendance();
+  }, []);
+
   return (
     <DashboardLayout>
       <div className="bg-white rounded-xl shadow-sm p-6">
-        <h1 className="text-xl font-semibold text-gray-800 mb-4">
+        <h1 className="text-xl font-semibold text-gray-800 mb-2">
           Child Attendance
         </h1>
 
-        {loading ? (
-          <p className="text-gray-500 text-sm">
-            Loading attendance...
+        {child && (
+          <p className="text-sm text-gray-500 mb-4">
+            {child.name} • {child.branch} • Year {child.year} • Section {child.section}
           </p>
+        )}
+
+        {loading ? (
+          <p className="text-gray-500 text-sm">Loading attendance...</p>
         ) : attendance.length === 0 ? (
           <p className="text-gray-500 text-sm">
             No attendance records found
@@ -56,7 +69,7 @@ const ParentChildAttendance = () => {
                     {record.subject}
                   </p>
                   <p className="text-sm text-gray-500">
-                    {record.day} • {record.time}
+                    {new Date(record.date).toLocaleDateString()} • {record.day}
                   </p>
                 </div>
 

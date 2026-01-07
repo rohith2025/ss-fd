@@ -41,7 +41,8 @@ const Sidebar = () => {
       {role === "parent" && (
         <>
           <NavLink to="/parent/dashboard" className={linkClass}>Dashboard</NavLink>
-          <NavLink to="/parent/attendance" className={linkClass}>Child Attendance</NavLink>
+          {/* <NavLink to="/parent/attendance" className={linkClass}>Child Attendance</NavLink> */}
+          <NavLink to="/parent/academics" className={linkClass}>Child Academics</NavLink>
         </>
       )}
 

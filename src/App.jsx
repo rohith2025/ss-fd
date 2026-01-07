@@ -19,6 +19,7 @@ import StudentTimetable from "./pages/student/StudentTimetable";
 
 import ParentDashboard from "./pages/parent/ParentDashboard";
 import ParentChildAttendance from "./pages/parent/ParentChildAttendance";
+import ParentAcademicOverview from "./pages/parent/ParentAcademicOverview";
 
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import TeacherAttendance from "./pages/teacher/TeacherAttendance";
@@ -117,6 +118,16 @@ const App = () => {
           <ParentChildAttendance />
         </ProtectedRoute>
       } />
+
+      <Route
+        path="/parent/academics"
+        element={
+          <ProtectedRoute allowedRoles={["parent"]}>
+            <ParentAcademicOverview />
+          </ProtectedRoute>
+        }
+      />
+
 
       {/* ========= TEACHER / HOD / LAB / EXAM HEAD ========= */}
       <Route path="/teacher/dashboard" element={
