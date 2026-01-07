@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef} from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify";
 
 const Holidays = () => {
   const { role } = useAuth();
@@ -11,6 +12,8 @@ const Holidays = () => {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
 
+  const toastShownRef = useRef(false);
+
   useEffect(() => {
     fetchHolidays();
   }, []);
@@ -19,8 +22,14 @@ const Holidays = () => {
     try {
       const res = await api.get("/holidays");
       setHolidays(res.data || []);
+
+      if (!toastShownRef.current) {
+      toast.success("Fetched holidays successfully");
+      toastShownRef.current = true;
+    }
     } catch (err) {
       console.error("Failed to fetch holidays");
+      toast.error("Failed to load holidays");
     } finally {
       setLoading(false);
     }
@@ -30,11 +39,13 @@ const Holidays = () => {
     e.preventDefault();
     try {
       await api.post("/holidays", { name: title, date });
+      toast.success("Holiday added successfully");
       setTitle("");
       setDate("");
       fetchHolidays();
     } catch (err) {
       console.error("Failed to create holiday");
+      toast.error("Failed to add holiday");
     }
   };
 

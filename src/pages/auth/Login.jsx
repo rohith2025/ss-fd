@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState,useRef} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../api/auth.api";
 import { useAuth } from "../../context/AuthContext";
 import HomeNavbar from "../HomeNavbar";
+import { toast } from "react-toastify";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,6 +16,9 @@ const Login = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const toastShownRef = useRef(false);
+
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -32,9 +37,16 @@ const Login = () => {
       else if (res.data.role === "parent") navigate("/parent/dashboard");
       else if (res.data.role === "admin") navigate("/admin/dashboard");
       else if (res.data.role === "exam_head") navigate("/exam-head/dashboard");
+
+      if (!toastShownRef.current) {
+      toast.success("User Logged successfully");
+      toastShownRef.current = true;
+    }
+
       else navigate("/teacher/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
+      toast.error("Failed to Login");
     } finally {
       setLoading(false);
     }

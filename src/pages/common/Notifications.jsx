@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef} from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify";
+
 
 const Notifications = () => {
   const { role } = useAuth();
@@ -12,6 +14,9 @@ const Notifications = () => {
   const [message, setMessage] = useState("");
   const [type, setType] = useState("general");
 
+  const toastShownRef = useRef(false);
+
+
   useEffect(() => {
     fetchNotifications();
   }, []);
@@ -20,8 +25,13 @@ const Notifications = () => {
     try {
       const res = await api.get("/notifications");
       setNotifications(res.data || []);
+      if (!toastShownRef.current) {
+      toast.success("Fetched notifications successfully");
+      toastShownRef.current = true;
+    }
     } catch (err) {
       console.error("Failed to fetch notifications");
+      toast.error("Failed to load notices");
     } finally {
       setLoading(false);
     }
@@ -31,12 +41,14 @@ const Notifications = () => {
     e.preventDefault();
     try {
       await api.post("/notifications", { title, message, type });
+      toast.success("Notifications added successfully");
       setTitle("");
       setMessage("");
       setType("general");
       fetchNotifications();
     } catch (err) {
       console.error("Failed to create notification");
+      toast.error("Failed to add notification");
     }
   };
 

@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState,useRef} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { registerUser } from "../../api/auth.api";
 import HomeNavbar from "../HomeNavbar";
+import { toast } from "react-toastify";
+
 
 const Register = () => {
   const navigate = useNavigate();
@@ -18,6 +20,9 @@ const Register = () => {
     managedBranch: "",
     subjects: "",
   });
+
+  const toastShownRef = useRef(false);
+
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -60,9 +65,15 @@ const Register = () => {
       }
 
       await registerUser(payload);
+      if (!toastShownRef.current) {
+      toast.success("User registered successfully");
+      toastShownRef.current = true;
+    }
       navigate("/login");
+
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
+      toast.error("Failed to load holidays");
     } finally {
       setLoading(false);
     }

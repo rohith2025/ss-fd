@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify";
 
 const Notices = () => {
   const { role } = useAuth();
@@ -11,6 +12,9 @@ const Notices = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  const toastShownRef = useRef(false);
+
+
   useEffect(() => {
     fetchNotices();
   }, []);
@@ -19,8 +23,13 @@ const Notices = () => {
     try {
       const res = await api.get("/notices");
       setNotices(res.data || []);
+      if (!toastShownRef.current) {
+      toast.success("Fetched notices successfully");
+      toastShownRef.current = true;
+    }
     } catch (err) {
       console.error("Failed to fetch notices");
+      toast.error("Failed to load notices");
     } finally {
       setLoading(false);
     }
@@ -30,11 +39,13 @@ const Notices = () => {
     e.preventDefault();
     try {
       await api.post("/notices", { title, description });
+      toast.success("Notice added successfully");
       setTitle("");
       setDescription("");
       fetchNotices();
     } catch (err) {
       console.error("Failed to create notice");
+      toast.error("Failed to add holiday");
     }
   };
 

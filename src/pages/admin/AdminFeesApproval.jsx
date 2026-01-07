@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import api from "../../api/axios";
+import { toast } from "react-toastify";
 
 const semesters = ["sem1","sem2","sem3","sem4","sem5","sem6","sem7","sem8"];
 
@@ -54,11 +55,12 @@ const AdminFeesApproval = () => {
 
     try {
       await api.put(`/fees/approve/${studentId}/${semester}`);
-      alert(`${semester.toUpperCase()} approved`);
+      toast.success(`${semester.toUpperCase()} approved`)
       fetchFees(studentId);
       setSemester("");
     } catch (err) {
       alert("Approval failed");
+      toast.error("Approval failed");
     }
   };
 

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import api from "../../api/axios";
+import { toast } from "react-toastify";
+
 
 const AdminUserLinking = () => {
   const [users, setUsers] = useState([]);
@@ -49,7 +51,7 @@ const AdminUserLinking = () => {
         examHeadId,
       });
 
-      alert("Users linked successfully");
+      toast.success("User Linked successfully");
 
       setStudentId("");
       setParentId("");
@@ -58,6 +60,7 @@ const AdminUserLinking = () => {
       setExamHeadId("");
     } catch (err) {
       console.error("Failed to link users");
+      toast.error("Failed to link User");
       alert("Failed to link users");
     }
   };
