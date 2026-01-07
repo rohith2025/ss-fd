@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import HomeNavbar from "./HomeNavbar";
+import heroImage from "../SikshaSetu.png";
+
+
 import {
   GraduationCap,
   Users,
@@ -51,7 +54,7 @@ const Home = () => {
         </div>
 
         <img
-          src="https://images.unsplash.com/photo-1588072432836-e10032774350"
+          src={heroImage}
           className="rounded-3xl shadow-2xl"
           alt="Education Platform"
         />
