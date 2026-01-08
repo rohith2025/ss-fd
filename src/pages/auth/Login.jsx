@@ -37,13 +37,13 @@ const Login = () => {
       else if (res.data.role === "parent") navigate("/parent/dashboard");
       else if (res.data.role === "admin") navigate("/admin/dashboard");
       else if (res.data.role === "exam_head") navigate("/exam-head/dashboard");
+      else navigate("/teacher/dashboard");
 
       if (!toastShownRef.current) {
       toast.success("User Logged successfully");
       toastShownRef.current = true;
     }
 
-      else navigate("/teacher/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
       toast.error("Failed to Login");
