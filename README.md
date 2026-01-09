@@ -1,16 +1,83 @@
-# React + Vite
+# 🎨 ShikshaSetu – Frontend  
+### React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![React](https://img.shields.io/badge/React-Frontend-blue?logo=react)
+![Vite](https://img.shields.io/badge/Vite-Build%20Tool-purple?logo=vite)
+![Tailwind](https://img.shields.io/badge/TailwindCSS-Styling-38B2AC?logo=tailwindcss)
+![Status](https://img.shields.io/badge/Status-Active-success)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📌 Overview
 
-## React Compiler
+ShikshaSetu Frontend provides the **user interface** for the ShikshaSetu academic management platform.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+It focuses on **clean UI**, **role-based dashboards**, and **seamless interaction** with backend REST APIs.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠 Tech Stack
+
+- ⚛️ **React.js** – UI library  
+- ⚡ **Vite** – Fast development build tool  
+- 🎨 **Tailwind CSS** – Utility-first styling  
+- 🧭 **React Router DOM** – Client-side routing  
+- 🔗 **Axios** – API communication  
+
+---
+
+## ✨ Features
+
+- 🔐 Role-based dashboards  
+- 🛡 Protected routing  
+- 📱 Responsive layouts  
+- 🧼 Clean and minimal UI  
+- 🔁 Centralized API communication  
+
+---
+
+## 👥 Role-Based UI
+
+### 🎓 Student
+- View timetable
+- View exams and grades
+- Apply for leave
+
+### 👨‍👩‍👧 Parent
+- View student academic information
+- Approve or reject leave requests
+
+### 👨‍🏫 Teacher
+- View assigned timetable
+- Update student grades
+
+### 🧑‍💼 HOD
+- Upload and manage timetables
+- Approve leave requests
+
+### 🛠 Admin
+- User and system management
+
+---
+
+## 🧭 Routing Strategy
+
+- 🌐 Public routes for authentication  
+- 🔒 Protected routes for dashboards  
+- 🎯 Route access controlled based on user role  
+
+---
+
+## 🔗 Backend Integration
+
+- REST APIs consumed using **Axios**
+- JWT token attached to authenticated requests
+- Error handling managed at UI level
+
+---
+
+## ▶️ Running the Frontend
+
+```bash
+npm install
+npm run dev
