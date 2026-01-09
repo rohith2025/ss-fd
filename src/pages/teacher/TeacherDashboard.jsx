@@ -37,7 +37,6 @@ const TeacherDashboard = () => {
 
   return (
     <DashboardLayout>
-      {/* Header */}
       <div className="bg-white shadow-sm px-6 py-4">
         <h1 className="text-xl font-semibold text-gray-800">
           Teacher Dashboard
@@ -47,9 +46,7 @@ const TeacherDashboard = () => {
         </p>
       </div>
 
-      {/* Cards */}
       <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Profile */}
         <div className="bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Profile
@@ -64,7 +61,6 @@ const TeacherDashboard = () => {
           )}
         </div>
 
-        {/* Linked Students (CLICKABLE) */}
         <div className="bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-4">
             Linked Students
@@ -83,7 +79,6 @@ const TeacherDashboard = () => {
           </div>
         </div>
 
-        {/* Role Access */}
         <div className="bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Role Access
@@ -112,7 +107,6 @@ const TeacherDashboard = () => {
         </div>
       </div>
 
-      {/* ✅ STUDENTS OVERLAY */}
       <StudentsOverlay
         isOpen={showStudentsOverlay}
         onClose={() => setShowStudentsOverlay(false)}

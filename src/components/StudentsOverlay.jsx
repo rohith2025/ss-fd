@@ -17,7 +17,6 @@ const StudentsOverlay = ({
 
   if (!isOpen) return null;
 
-  /* ================= CSV DOWNLOAD ================= */
   const downloadCSV = () => {
     const headers = ["Name", "Branch", "Year", "Section"];
 
@@ -44,7 +43,6 @@ const StudentsOverlay = ({
     document.body.removeChild(link);
   };
 
-  /* ================= PDF DOWNLOAD ================= */
   const downloadPDF = () => {
     const doc = new jsPDF();
 
@@ -62,9 +60,9 @@ const StudentsOverlay = ({
         s.section || "—",
       ]),
       styles: { halign: "center" },
-      headStyles: { fillColor: [14, 165, 233] }, // sky-500
+      headStyles: { fillColor: [14, 165, 233] }, 
       columnStyles: {
-        1: { halign: "left" }, // Name left aligned
+        1: { halign: "left" }, 
       },
     });
 
@@ -73,22 +71,18 @@ const StudentsOverlay = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* Modal */}
       <div className="relative bg-white rounded-xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden">
-        {/* Header */}
         <div className="flex justify-between items-center p-6 border-b">
           <h2 className="text-xl font-semibold text-gray-800">
             {title}
           </h2>
 
           <div className="flex items-center gap-3">
-            {/* Download Button */}
             {students.length > 0 && (
               <div className="relative">
                 <button
@@ -98,7 +92,6 @@ const StudentsOverlay = ({
                   📥 Download
                 </button>
 
-                {/* Dropdown */}
                 {showDownloadOptions && (
                   <div className="absolute right-0 mt-2 w-32 bg-white border rounded-lg shadow-lg z-10">
                     <button
@@ -133,7 +126,6 @@ const StudentsOverlay = ({
           </div>
         </div>
 
-        {/* Body */}
         <div className="p-6 overflow-y-auto max-h-[70vh]">
           {students.length > 0 ? (
             <div className="overflow-x-auto">

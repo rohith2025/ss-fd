@@ -8,10 +8,8 @@ const ParentChildAttendance = () => {
   const [child, setChild] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  /* ================= FETCH LINKED CHILD ================= */
   const fetchChildAndAttendance = async () => {
     try {
-      // 1️⃣ Get linked child
       const childRes = await api.get("/parent/child");
 
       if (!childRes.data?.child) {
@@ -23,7 +21,6 @@ const ParentChildAttendance = () => {
       const studentId = childRes.data.child._id;
       setChild(childRes.data.child);
 
-      // 2️⃣ Fetch attendance
       const attRes = await api.get(`/parent/attendance/${studentId}`);
       setAttendance(attRes.data || []);
     } catch (err) {

@@ -29,7 +29,6 @@ const ExamHeadManageGrades = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Filter out empty subjects
       const validSubjects = subjects.filter(sub =>
         sub.name.trim() && sub.grade.trim() && sub.credits
       ).map(sub => ({

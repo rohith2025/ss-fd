@@ -47,7 +47,6 @@ const StudentDashboard = () => {
 
   return (
     <DashboardLayout>
-      {/* Header */}
       <div className="bg-white shadow-sm px-6 py-4">
         <h1 className="text-xl font-semibold text-gray-800">
           Student Dashboard
@@ -57,9 +56,7 @@ const StudentDashboard = () => {
         </p>
       </div>
 
-      {/* Cards */}
       <div className="p-6 flex flex-col lg:flex-row gap-6">
-        {/* Profile */}
         <div className="flex-1 bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Profile
@@ -69,7 +66,6 @@ const StudentDashboard = () => {
           <p className="text-sm text-gray-600">Section: {student?.section}</p>
         </div>
 
-      {/* Attendance */}
       <div className="flex-1 bg-white rounded-xl shadow-sm p-5">
         <h2 className="text-lg font-medium text-gray-700 mb-4">
           Attendance
@@ -98,7 +94,6 @@ const StudentDashboard = () => {
       </div>
 
 
-        {/* CGPA */}
         <div className="flex-1 bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-4">
             Academic Performance
@@ -127,7 +122,6 @@ const StudentDashboard = () => {
         </div>
       </div>
 
-      {/* Overlays */}
       <CgpaOverlay
         isOpen={showCgpaOverlay}
         onClose={() => setShowCgpaOverlay(false)}

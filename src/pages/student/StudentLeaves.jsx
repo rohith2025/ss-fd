@@ -11,7 +11,6 @@ const StudentLeaves = () => {
   const [toDate, setToDate] = useState("");
   const [reason, setReason] = useState("");
 
-  // 🔍 FILTER STATES
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
 
@@ -49,14 +48,12 @@ const StudentLeaves = () => {
     }
   };
 
-  // 📅 GET UNIQUE YEARS FROM LEAVES
   const years = [
     ...new Set(
       leaves.map((l) => new Date(l.fromDate).getFullYear())
     ),
   ];
 
-  // 🔎 FILTER LOGIC
   const filteredLeaves = leaves.filter((leave) => {
     const date = new Date(leave.fromDate);
     const monthMatch =
@@ -76,7 +73,6 @@ const StudentLeaves = () => {
           Leave Requests
         </h1>
 
-        {/* ================= APPLY LEAVE ================= */}
         <form
           onSubmit={handleApplyLeave}
           className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4"
@@ -114,7 +110,6 @@ const StudentLeaves = () => {
           </button>
         </form>
 
-        {/* ================= FILTERS ================= */}
         {!loading && leaves.length > 0 && (
           <div className="flex flex-wrap gap-4 mb-5">
             <select
@@ -147,7 +142,6 @@ const StudentLeaves = () => {
           </div>
         )}
 
-        {/* ================= LEAVE LIST ================= */}
         {loading ? (
           <p className="text-gray-500 text-sm">
             Loading leave history...

@@ -17,7 +17,6 @@ const SearchableDropdown = ({
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    // Find selected option
     const option = options.find((opt) => opt[valueKey] === value);
     if (option) {
       setSelectedOption(option);

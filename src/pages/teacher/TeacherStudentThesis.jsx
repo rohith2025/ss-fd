@@ -15,7 +15,6 @@ const TeacherStudentThesis = () => {
     fetchStudents();
   }, []);
 
-  /* ================= FETCH STUDENTS ================= */
   const fetchStudents = async () => {
     try {
       const res = await api.get("/teacher/dashboard");
@@ -28,7 +27,6 @@ const TeacherStudentThesis = () => {
     }
   };
 
-  /* ================= FETCH THESIS ================= */
   const fetchStudentThesis = async (studentId) => {
     if (!studentId) return;
 
@@ -50,10 +48,9 @@ const TeacherStudentThesis = () => {
     }
   };
 
-  /* ================= DROPDOWN OPTIONS (KEY FIX) ================= */
   const studentOptions = students.map((s) => ({
-    _id: s._id,                               // REQUIRED
-    name: s.name || s.studentName,            // REQUIRED
+    _id: s._id,                               
+    name: s.name || s.studentName,            
   }));
 
   return (

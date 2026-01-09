@@ -61,7 +61,6 @@ const ParentDashboard = () => {
 
   return (
     <DashboardLayout>
-      {/* Navbar */}
       <div className="bg-white shadow-sm px-6 py-4">
         <h1 className="text-xl font-semibold text-gray-800">
           Parent Dashboard
@@ -71,7 +70,6 @@ const ParentDashboard = () => {
         </p>
       </div>
 
-      {/* Main Content */}
       <div className="p-6">
         <div className="bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-4">

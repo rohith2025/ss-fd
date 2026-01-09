@@ -7,15 +7,12 @@ const StudentThesis = () => {
   const [thesisList, setThesisList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Form state
   const [subject, setSubject] = useState("");
   const [title, setTitle] = useState("");
   const [fileUrl, setFileUrl] = useState("");
 
-  // 🔍 Search
   const [search, setSearch] = useState("");
 
-  /* ================= FETCH MY THESIS ================= */
   const fetchMyThesis = async () => {
     try {
       const res = await api.get("/thesis/my");
@@ -32,7 +29,6 @@ const StudentThesis = () => {
     fetchMyThesis();
   }, []);
 
-  /* ================= UPLOAD THESIS ================= */
   const handleUploadThesis = async (e) => {
     e.preventDefault();
 
@@ -43,7 +39,6 @@ const StudentThesis = () => {
         fileUrl,
       });
 
-      // Add new thesis on top
       setThesisList((prev) => [res.data.thesis, ...prev]);
 
       toast.success("Thesis uploaded successfully");
@@ -59,7 +54,6 @@ const StudentThesis = () => {
     }
   };
 
-  /* ================= FILTERED LIST ================= */
   const filteredThesis = thesisList.filter(
     (t) =>
       t.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -73,7 +67,6 @@ const StudentThesis = () => {
           My Thesis
         </h1>
 
-        {/* ================= UPLOAD FORM ================= */}
         <form
           onSubmit={handleUploadThesis}
           className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4"
@@ -113,7 +106,6 @@ const StudentThesis = () => {
           </button>
         </form>
 
-        {/* ================= SEARCH ================= */}
         <div className="mb-4">
           <input
             type="text"
@@ -124,7 +116,6 @@ const StudentThesis = () => {
           />
         </div>
 
-        {/* ================= THESIS LIST ================= */}
         {loading ? (
           <p className="text-gray-500 text-sm">Loading thesis...</p>
         ) : filteredThesis.length === 0 ? (

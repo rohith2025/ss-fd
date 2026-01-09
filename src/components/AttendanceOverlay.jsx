@@ -6,7 +6,7 @@ const AttendanceOverlay = ({
   isOpen,
   onClose,
   attendance = [],
-  student = {}, // pass student optionally if you have
+  student = {},
 }) => {
   const [view, setView] = useState("daily");
 
@@ -17,7 +17,6 @@ const AttendanceOverlay = ({
 
   if (!isOpen) return null;
 
-  /* ================= GROUP DATA ================= */
   const groupData = () => {
     if (view === "daily") return attendance;
 
@@ -48,18 +47,13 @@ const AttendanceOverlay = ({
     return ((present / records.length) * 100).toFixed(2);
   };
 
-  /* ================= MONTHLY PDF ================= */
   const downloadPDF = () => {
     if (view !== "monthly") return;
 
     const doc = new jsPDF();
 
-    /* ---------- HEADER ---------- */
     doc.setFontSize(14);
-    // doc.text(`Name: ${student?.name || "__________"}`, 14, 18);
-    // doc.text(`Year: ${student?.year || "___"}`, 140, 18);
 
-    // doc.text(`Section: ${student?.section || "___"}`, 14, 26);
     doc.text(
       `Month Attendance: ${new Date().toLocaleString("default", {
         month: "long",
@@ -72,7 +66,6 @@ const AttendanceOverlay = ({
     doc.setLineWidth(0.5);
     doc.line(14, 38, 196, 38);
 
-    /* ---------- SUBJECT SUMMARY ---------- */
     const subjectMap = {};
 
     attendance.forEach((a) => {
@@ -149,7 +142,6 @@ const AttendanceOverlay = ({
       />
 
       <div className="relative bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-        {/* Header */}
         <div className="flex justify-between items-center p-6 border-b">
           <h2 className="text-xl font-semibold text-gray-800">
             Attendance Details
@@ -174,7 +166,6 @@ const AttendanceOverlay = ({
           </div>
         </div>
 
-        {/* Tabs */}
         <div className="flex gap-3 p-4 border-b">
           {["daily", "weekly", "monthly"].map((t) => (
             <button
@@ -191,7 +182,6 @@ const AttendanceOverlay = ({
           ))}
         </div>
 
-        {/* Body (UNCHANGED) */}
         <div className="p-6 overflow-y-auto max-h-[60vh] space-y-4">
           {data.length ? (
             data.map((item, idx) => {

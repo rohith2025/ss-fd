@@ -50,7 +50,6 @@ const ParentAcademicOverview = () => {
     );
   }
 
-  /* ================= ATTENDANCE PERCENTAGE ================= */
   const attendance = data.attendance || [];
   const attendancePercentage =
     attendance.length === 0
@@ -63,7 +62,6 @@ const ParentAcademicOverview = () => {
 
   return (
     <DashboardLayout>
-      {/* HEADER */}
       <div className="bg-white shadow-sm px-6 py-4">
         <h1 className="text-xl font-semibold text-gray-800">
           Parent Academic Overview
@@ -73,10 +71,8 @@ const ParentAcademicOverview = () => {
         </p>
       </div>
 
-      {/* CARDS */}
       <div className="p-6 flex flex-col lg:flex-row gap-6">
 
-        {/* PROFILE CARD */}
         <div className="flex-1 bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-2">
             Student Profile
@@ -92,7 +88,6 @@ const ParentAcademicOverview = () => {
           </p>
         </div>
 
-        {/* ATTENDANCE CARD */}
         <div className="flex-1 bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-4">
             Attendance
@@ -120,7 +115,6 @@ const ParentAcademicOverview = () => {
           </div>
         </div>
 
-        {/* CGPA CARD */}
         <div className="flex-1 bg-white rounded-xl shadow-sm p-5">
           <h2 className="text-lg font-medium text-gray-700 mb-4">
             Academic Performance
@@ -151,17 +145,14 @@ const ParentAcademicOverview = () => {
         </div>
       </div>
 
-{/* LINKED FACULTY */}
 <div className="px-6 pb-6">
   <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
     <h3 className="text-lg font-semibold text-gray-800 mb-5">
       Linked Faculty
     </h3>
 
-    {/* COLUMN WISE */}
     <div className="flex flex-col gap-4">
 
-      {/* HOD */}
       <div className="flex items-start gap-4 p-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100 transition">
         <div className="w-11 h-11 flex items-center justify-center rounded-lg bg-blue-100 text-blue-600">
           🎓
@@ -182,7 +173,6 @@ const ParentAcademicOverview = () => {
         </div>
       </div>
 
-      {/* Exam Head */}
       <div className="flex items-start gap-4 p-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100 transition">
         <div className="w-11 h-11 flex items-center justify-center rounded-lg bg-purple-100 text-purple-600">
           📝
@@ -203,7 +193,6 @@ const ParentAcademicOverview = () => {
         </div>
       </div>
 
-      {/* Teachers */}
       <div className="flex items-start gap-4 p-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100 transition">
         <div className="w-11 h-11 flex items-center justify-center rounded-lg bg-green-100 text-green-600">
           👩‍🏫
@@ -236,7 +225,6 @@ const ParentAcademicOverview = () => {
 
 
 
-      {/* OVERLAYS */}
       <ParentAttendanceOverlay
         open={showAttendance}
         onClose={() => setShowAttendance(false)}

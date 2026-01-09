@@ -28,20 +28,16 @@ const TeacherAttendance = () => {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  // STEP 1
   const [selectedDate, setSelectedDate] = useState("");
   const [dayOfWeek, setDayOfWeek] = useState("");
 
-  // STEP 2
   const [availableClasses, setAvailableClasses] = useState([]);
   const [selectedClass, setSelectedClass] = useState(null);
 
-  // STEP 3
   const [students, setStudents] = useState([]);
   const [attendanceData, setAttendanceData] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
 
-  /* ================= DATE HANDLER ================= */
   const handleDateChange = (date) => {
     setSelectedDate(date);
     if (date) {
@@ -54,7 +50,6 @@ const TeacherAttendance = () => {
     }
   };
 
-  /* ================= FETCH CLASSES ================= */
   const handleFetchClasses = async () => {
     if (!selectedDate) {
       toast.error("Please select a date");
@@ -73,7 +68,6 @@ const TeacherAttendance = () => {
     }
   };
 
-  /* ================= SELECT CLASS ================= */
   const handleClassSelect = async (classItem) => {
     setSelectedClass(classItem);
     setLoading(true);
@@ -88,7 +82,6 @@ const TeacherAttendance = () => {
       const studentList = res.data || [];
       setStudents(studentList);
 
-      // Default status → present (can be changed to pending later)
       const init = {};
       studentList.forEach((s) => (init[s._id] = "present"));
       setAttendanceData(init);
@@ -102,12 +95,10 @@ const TeacherAttendance = () => {
     }
   };
 
-  /* ================= UPDATE STATUS ================= */
   const handleAttendanceChange = (id, status) => {
     setAttendanceData((prev) => ({ ...prev, [id]: status }));
   };
 
-  /* ================= SUBMIT ================= */
   const handleMarkAttendance = async () => {
     setLoading(true);
     try {
@@ -133,7 +124,6 @@ const TeacherAttendance = () => {
     }
   };
 
-  /* ================= BACK ================= */
   const handleBack = () => {
     if (step === 2) {
       setStep(1);
@@ -146,7 +136,6 @@ const TeacherAttendance = () => {
     }
   };
 
-  /* ================= FILTER ================= */
   const filteredStudents = students.filter((s) =>
     s.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -154,7 +143,6 @@ const TeacherAttendance = () => {
   return (
     <DashboardLayout>
       <div className="bg-white rounded-xl shadow-sm p-6">
-        {/* HEADER */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-xl font-semibold">Mark Attendance</h1>
           {step > 1 && (
@@ -167,7 +155,6 @@ const TeacherAttendance = () => {
           )}
         </div>
 
-        {/* STEP INDICATOR */}
         <div className="flex items-center mb-6">
           {[1, 2, 3].map((n) => (
             <div key={n} className="flex items-center">
@@ -189,7 +176,6 @@ const TeacherAttendance = () => {
           ))}
         </div>
 
-        {/* ================= STEP 1 ================= */}
         {step === 1 && (
           <div className="space-y-4">
             <input
@@ -210,7 +196,6 @@ const TeacherAttendance = () => {
           </div>
         )}
 
-        {/* ================= STEP 2 ================= */}
         {step === 2 && (
           <div className="grid gap-3">
             {availableClasses.map((c, i) => (
@@ -228,10 +213,8 @@ const TeacherAttendance = () => {
           </div>
         )}
 
-        {/* ================= STEP 3 ================= */}
         {step === 3 && (
           <div className="space-y-4">
-            {/* SEARCH */}
             <input
               type="text"
               placeholder="Search student by name..."
@@ -256,10 +239,8 @@ const TeacherAttendance = () => {
                   </div>
 
                   <div className="flex items-center gap-6">
-                    {/* STATUS BADGE */}
                     <StatusBadge status={attendanceData[s._id]} />
 
-                    {/* CONTROLS */}
                     <div className="flex gap-4 text-sm">
                       <label className="flex items-center gap-1">
                         <input

@@ -28,7 +28,6 @@ const ExamHeadDashboard = () => {
   return (
     <DashboardLayout>
       <div className="bg-white rounded-xl shadow-sm p-6">
-        {/* HEADER */}
         <h1 className="text-xl font-semibold text-gray-800 mb-4">
           Exam Head Dashboard
         </h1>
@@ -41,7 +40,6 @@ const ExamHeadDashboard = () => {
           <p className="text-gray-500 text-sm">Loading...</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* LINKED STUDENTS CARD (CLICKABLE) */}
             <div
               className="bg-sky-50 rounded-lg p-5 cursor-pointer hover:shadow-md transition"
               onClick={() => setShowStudentsOverlay(true)}
@@ -57,7 +55,6 @@ const ExamHeadDashboard = () => {
               </p>
             </div>
 
-            {/* ROLE CARD */}
             <div className="bg-sky-50 rounded-lg p-5">
               <h2 className="text-lg font-medium text-gray-700 mb-2">
                 Role
@@ -73,7 +70,6 @@ const ExamHeadDashboard = () => {
         )}
       </div>
 
-      {/* ================= STUDENTS OVERLAY ================= */}
       <StudentsOverlay
         isOpen={showStudentsOverlay}
         onClose={() => setShowStudentsOverlay(false)}

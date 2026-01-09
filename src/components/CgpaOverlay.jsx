@@ -24,7 +24,6 @@ const CgpaOverlay = ({ isOpen, onClose, grades }) => {
 
   if (!isOpen || !grades) return null;
 
-  /* ================= PDF GENERATOR ================= */
   const downloadReport = (type = "all", semesterNo = null) => {
     const doc = new jsPDF();
     let y = 20;
@@ -33,7 +32,6 @@ const CgpaOverlay = ({ isOpen, onClose, grades }) => {
     doc.text("Academic Performance Report", 14, y);
     y += 10;
 
-    /* ========== FULL REPORT (CGPA + ALL SEMS) ========== */
     if (type === "all") {
       doc.setFontSize(12);
       doc.text(`Overall CGPA: ${grades.cgpa}`, 14, y);
@@ -65,7 +63,6 @@ const CgpaOverlay = ({ isOpen, onClose, grades }) => {
       doc.save("CGPA_Full_Report.pdf");
     }
 
-    /* ========== SINGLE SEMESTER (ONLY SGPA) ========== */
     if (type === "semester") {
       const sem = grades.semesters.find(
         (s) => s.semester === semesterNo
@@ -97,14 +94,12 @@ const CgpaOverlay = ({ isOpen, onClose, grades }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
 
       <div className="relative bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-        {/* Header */}
         <div className="flex justify-between items-center p-6 border-b">
           <h2 className="text-xl font-semibold text-gray-800">
             Semester Performance
@@ -118,7 +113,6 @@ const CgpaOverlay = ({ isOpen, onClose, grades }) => {
         </div>
 
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)] space-y-6">
-          {/* OVERALL CGPA */}
           <div
             onClick={() => downloadReport("all")}
             className="cursor-pointer text-center bg-sky-50 rounded-lg p-6 hover:shadow-md transition"
@@ -131,7 +125,6 @@ const CgpaOverlay = ({ isOpen, onClose, grades }) => {
             </div>
           </div>
 
-          {/* SEMESTERS */}
           <div>
             <h3 className="text-lg font-medium text-gray-700 mb-4">
               Semester-wise Performance

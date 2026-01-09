@@ -24,7 +24,6 @@ const Sidebar = () => {
         z-30
       "
     >
-      {/* STUDENT */}
       {role === "student" && (
         <>
           <NavLink to="/student/dashboard" className={linkClass}>Dashboard</NavLink>
@@ -37,7 +36,6 @@ const Sidebar = () => {
         </>
       )}
 
-      {/* PARENT */}
       {role === "parent" && (
         <>
           <NavLink to="/parent/dashboard" className={linkClass}>Dashboard</NavLink>
@@ -46,7 +44,6 @@ const Sidebar = () => {
         </>
       )}
 
-      {/* TEACHER */}
       {role === "teacher" && (
         <>
           <NavLink to="/teacher/dashboard" className={linkClass}>Dashboard</NavLink>
@@ -56,7 +53,6 @@ const Sidebar = () => {
         </>
       )}
 
-      {/* HOD */}
       {role === "hod" && (
         <>
           <NavLink to="/teacher/dashboard" className={linkClass}>Dashboard</NavLink>
@@ -66,7 +62,6 @@ const Sidebar = () => {
         </>
       )}
 
-      {/* EXAM HEAD */}
       {role === "exam_head" && (
         <>
           <NavLink to="/exam-head/dashboard" className={linkClass}>Dashboard</NavLink>
@@ -76,7 +71,6 @@ const Sidebar = () => {
         </>
       )}
 
-      {/* ADMIN */}
       {role === "admin" && (
         <>
           <NavLink to="/admin/dashboard" className={linkClass}>Dashboard</NavLink>
@@ -86,7 +80,6 @@ const Sidebar = () => {
         </>
       )}
 
-      {/* COMMON */}
       <div className="mt-6 border-t pt-4">
         <NavLink to="/holidays" className={linkClass}>Holidays</NavLink>
         <NavLink to="/notices" className={linkClass}>Notices</NavLink>

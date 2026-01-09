@@ -4,13 +4,10 @@ import Navbar from "./Navbar";
 const DashboardLayout = ({ children }) => {
   return (
     <>
-      {/* Top Navbar (fixed) */}
       <Navbar />
 
-      {/* Left Sidebar (fixed, below navbar) */}
       <Sidebar />
 
-      {/* Page Content */}
       <main
         className="
           ml-64        /* space for sidebar */

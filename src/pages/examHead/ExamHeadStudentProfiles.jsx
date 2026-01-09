@@ -171,7 +171,6 @@ const ExamHeadStudentProfiles = () => {
                         ))}
                       </div>
                     ) : (
-                      // Fallback for old data format
                       <div className="text-sm">
                         <p>
                           <span className="text-gray-500">Semester:</span>
