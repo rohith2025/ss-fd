@@ -59,6 +59,7 @@ const Sidebar = () => {
           <NavLink to="/hod/leaves" className={linkClass}>Leave Approvals</NavLink>
           <NavLink to="/hod/students" className={linkClass}>Student Profiles</NavLink>
           <NavLink to="/hod/timetable" className={linkClass}>Timetable</NavLink>
+          <NavLink to="/hod/timetables" className={linkClass}>TimeTable List</NavLink>
         </>
       )}
 

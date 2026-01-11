@@ -157,7 +157,7 @@ const Home = () => {
             title="Exam Head"
             points={[
               "Manage grades",
-              "Approve activities",
+              "Create Exams",
               "Academic oversight",
             ]}
           />

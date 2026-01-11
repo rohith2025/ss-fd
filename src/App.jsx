@@ -28,6 +28,8 @@ import TeacherTimetable from "./pages/teacher/TeacherTimetable";
 import HodLeaveDashboard from "./pages/teacher/HodLeaveDashboard";
 import HodStudentProfiles from "./pages/teacher/HodStudentProfiles";
 import HodTimetable from "./pages/teacher/HodTimetable";
+import HodTimetableList from "./pages/teacher/HodTimetableList";
+
 
 
 import ExamHeadDashboard from "./pages/examHead/ExamHeadDashboard";
@@ -167,6 +169,11 @@ const App = () => {
       <Route path="/hod/timetable" element={
         <ProtectedRoute allowedRoles={["hod"]}>
           <HodTimetable />
+        </ProtectedRoute>
+      } />
+      <Route path="/hod/timetables" element={
+        <ProtectedRoute allowedRoles={["hod"]}>
+          <HodTimetableList />
         </ProtectedRoute>
       } />
 

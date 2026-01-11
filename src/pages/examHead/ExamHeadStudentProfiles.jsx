@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import { getLinkedStudents, getStudentProfile } from "../../api/examHead.api";
+import { toast } from "react-toastify";
 
 const ExamHeadStudentProfiles = () => {
   const [students, setStudents] = useState([]);
@@ -33,7 +34,9 @@ const ExamHeadStudentProfiles = () => {
     try {
       const res = await getStudentProfile(studentId);
       setProfile(res.data);
+      toast.success("Student profile loaded");
     } catch (err) {
+      toast.error("Failed to fetch student profile");
       console.error("Failed to fetch student profile");
     } finally {
       setProfileLoading(false);

@@ -1,14 +1,31 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import DashboardLayout from "../../components/DashboardLayout";
 import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify";
 
 const HodTimetableList = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
+
   const [timetables, setTimetables] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [year, setYear] = useState("");
+  const [section, setSection] = useState("");
+  const [showDownloadOptions, setShowDownloadOptions] = useState(false);
+
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+  const timeSlots = [
+    "10:00 AM - 11:00 AM",
+    "11:00 AM - 12:00 PM",
+    "12:00 PM - 1:00 PM",
+    "1:00 PM - 2:00 PM",
+    "2:00 PM - 3:00 PM",
+    "3:00 PM - 4:00 PM",
+  ];
 
   useEffect(() => {
     fetchTimetables();
@@ -16,134 +33,228 @@ const HodTimetableList = () => {
 
   const fetchTimetables = async () => {
     try {
-      const res = await api.get("/hod/timetables");
+      const res = await api.get("/timetable/hod/all");
       setTimetables(res.data || []);
-    } catch (err) {
-      console.error("Failed to fetch timetables");
+    } catch {
+      toast.error("Failed to load timetables");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleEdit = (timetableId) => {
-    navigate(`/hod/timetable/edit/${timetableId}`);
+  /* ===== SELECTED TIMETABLE ===== */
+  const selectedTimetable = timetables.find(
+    (tt) =>
+      tt.year === Number(year) &&
+      tt.section.toLowerCase() === section.toLowerCase()
+  );
+
+  const getCell = (day, time) => {
+    if (!selectedTimetable) return null;
+    const period = selectedTimetable.periods.find((p) => p.day === day);
+    return period?.slots.find((s) => s.time === time);
   };
 
-  const groupTimetables = () => {
-    const grouped = {};
-    timetables.forEach((timetable) => {
-      const key = `${timetable.year}-${timetable.section}`;
-      if (!grouped[key]) {
-        grouped[key] = [];
-      }
-      grouped[key].push(timetable);
+  /* ===== CSV DOWNLOAD ===== */
+  const downloadCSV = () => {
+    if (!selectedTimetable) return;
+
+    const headers = ["Time", ...days];
+
+    const rows = timeSlots.map((time) => {
+      const row = [time];
+      days.forEach((day) => {
+        const cell = getCell(day, time);
+        row.push(
+          cell && cell.subject && cell.subject !== "LUNCH BREAK"
+            ? `${cell.subject} (${cell.teacher?.name || "-"})`
+            : "-"
+        );
+      });
+      return row;
     });
-    return grouped;
+
+    const csv =
+      [headers, ...rows]
+        .map((r) => r.map((v) => `"${v}"`).join(","))
+        .join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `timetable_year_${year}_section_${section}.csv`;
+    link.click();
   };
 
-  const groupedTimetables = groupTimetables();
+  /* ===== PDF DOWNLOAD (jsPDF + autoTable) ===== */
+  const downloadPDF = () => {
+    if (!selectedTimetable) return;
+
+    const doc = new jsPDF("landscape");
+
+    doc.setFontSize(16);
+    doc.text(
+      `${user?.managedBranch} - Year ${year}, Section ${section}`,
+      14,
+      18
+    );
+
+    const head = [["Time", ...days]];
+
+    const body = timeSlots.map((time) => {
+      const row = [time];
+      days.forEach((day) => {
+        const cell = getCell(day, time);
+        row.push(
+          cell && cell.subject && cell.subject !== "LUNCH BREAK"
+            ? `${cell.subject}\n${cell.teacher?.name || ""}`
+            : "-"
+        );
+      });
+      return row;
+    });
+
+    autoTable(doc, {
+      startY: 26,
+      head,
+      body,
+      styles: {
+        halign: "center",
+        valign: "middle",
+        fontSize: 9,
+        cellPadding: 4,
+      },
+      headStyles: {
+        fillColor: [14, 165, 233], // sky-500
+        textColor: 255,
+      },
+      columnStyles: {
+        0: { cellWidth: 35 },
+      },
+    });
+
+    doc.save(`timetable_year_${year}_section_${section}.pdf`);
+  };
 
   return (
     <DashboardLayout>
       <div className="bg-white rounded-xl shadow-sm p-6">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-xl font-semibold text-gray-800">
-              My Timetables
-            </h1>
-            <p className="text-sm text-gray-500 mt-1">
-              Branch: <span className="font-medium">{user?.managedBranch || "N/A"}</span>
-            </p>
-          </div>
-          <button
-            onClick={() => navigate("/hod/timetable")}
-            className="bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 text-sm font-medium"
+
+        {/* HEADER */}
+        <h1 className="text-xl font-semibold text-gray-800 mb-2">
+          Timetable List
+        </h1>
+        <p className="text-sm text-gray-500 mb-6">
+          Branch: <span className="font-medium">{user?.managedBranch}</span>
+        </p>
+
+        {/* FILTERS */}
+        <div className="flex gap-4 mb-6 items-center">
+          <select
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            className="border rounded-md px-3 py-2 text-sm"
           >
-            Create New Timetable
-          </button>
+            <option value="">Select Year</option>
+            {[1, 2, 3, 4].map((y) => (
+              <option key={y} value={y}>{y}</option>
+            ))}
+          </select>
+
+          <input
+            type="text"
+            value={section}
+            onChange={(e) => setSection(e.target.value)}
+            placeholder="Section (A/B/C)"
+            className="border rounded-md px-3 py-2 text-sm"
+          />
+
+          {selectedTimetable && (
+            <div className="relative">
+              <button
+                onClick={() => setShowDownloadOptions(!showDownloadOptions)}
+                className="bg-sky-500 text-white px-4 py-2 rounded-md hover:bg-sky-600 text-sm"
+              >
+                📥 Download
+              </button>
+
+              {showDownloadOptions && (
+                <div className="absolute right-0 mt-2 w-32 bg-white border rounded-lg shadow-lg z-10">
+                  <button
+                    onClick={() => {
+                      downloadCSV();
+                      setShowDownloadOptions(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                  >
+                    CSV
+                  </button>
+                  <button
+                    onClick={() => {
+                      downloadPDF();
+                      setShowDownloadOptions(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                  >
+                    PDF
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
+        {/* CONTENT */}
         {loading ? (
-          <div className="space-y-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
-                <div className="space-y-2">
-                  {[...Array(5)].map((_, j) => (
-                    <div key={j} className="h-16 bg-gray-100 rounded"></div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : Object.keys(groupedTimetables).length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-sm mb-4">
-              No timetables created yet
-            </p>
-            <button
-              onClick={() => navigate("/hod/timetable")}
-              className="bg-sky-600 text-white px-6 py-2 rounded-md hover:bg-sky-700 text-sm"
-            >
-              Create Your First Timetable
-            </button>
-          </div>
+          <p className="text-gray-500 text-sm">Loading timetables...</p>
+        ) : !selectedTimetable ? (
+          <p className="text-gray-500 text-sm">
+            Select Year and Section to view timetable
+          </p>
         ) : (
-          <div className="space-y-8">
-            {Object.entries(groupedTimetables).map(([key, timetableGroup]) => (
-              <div key={key}>
-                <h2 className="text-lg font-medium text-gray-700 mb-4">
-                  Year {key.split('-')[0]} - Section {key.split('-')[1]}
-                </h2>
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {timetableGroup.map((timetable) => (
-                    <div
-                      key={timetable._id}
-                      className="border rounded-lg p-4 hover:shadow-md transition-shadow"
-                    >
-                      <div className="flex justify-between items-start mb-3">
-                        <div>
-                          <h3 className="font-medium text-gray-800">
-                            {timetable.day}
-                          </h3>
-                          <p className="text-sm text-gray-500">
-                            {timetable.slots?.length || 0} slots
-                          </p>
-                        </div>
-                        <button
-                          onClick={() => handleEdit(timetable._id)}
-                          className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-                        >
-                          Edit
-                        </button>
-                      </div>
-
-                      {timetable.slots && timetable.slots.length > 0 ? (
-                        <div className="space-y-2">
-                          {timetable.slots.slice(0, 3).map((slot, idx) => (
-                            <div key={idx} className="text-xs text-gray-600">
-                              <span className="font-medium">
-                                {slot.startTime} - {slot.endTime}
-                              </span>
-                              {slot.subject && (
-                                <span className="ml-2">• {slot.subject}</span>
-                              )}
-                            </div>
-                          ))}
-                          {timetable.slots.length > 3 && (
-                            <p className="text-xs text-gray-400">
-                              +{timetable.slots.length - 3} more slots
-                            </p>
-                          )}
-                        </div>
-                      ) : (
-                        <p className="text-sm text-gray-400">No slots assigned</p>
-                      )}
-                    </div>
+          <div className="overflow-x-auto border rounded-lg p-4 bg-white">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr>
+                  <th className="border px-4 py-2">Time</th>
+                  {days.map((day) => (
+                    <th key={day} className="border px-4 py-2">
+                      {day}
+                    </th>
                   ))}
-                </div>
-              </div>
-            ))}
+                </tr>
+              </thead>
+              <tbody>
+                {timeSlots.map((time) => (
+                  <tr key={time}>
+                    <td className="border px-4 py-2 font-medium">
+                      {time}
+                    </td>
+                    {days.map((day) => {
+                      const cell = getCell(day, time);
+                      return (
+                        <td key={day} className="border px-4 py-2 text-center">
+                          {cell && cell.subject && cell.subject !== "LUNCH BREAK" ? (
+                            <>
+                              <div className="font-semibold">
+                                {cell.subject}
+                              </div>
+                              <div className="text-xs text-gray-600">
+                                {cell.teacher?.name || "-"}
+                              </div>
+                            </>
+                          ) : (
+                            <span className="text-gray-400">—</span>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>

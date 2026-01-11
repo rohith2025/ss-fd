@@ -1,6 +1,8 @@
 import { useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import { createExam } from "../../api/exam.api";
+import { toast } from "react-toastify";
+
 
 const ExamHeadCreateExam = () => {
   const [form, setForm] = useState({
@@ -27,7 +29,7 @@ const ExamHeadCreateExam = () => {
       !form.examDate ||
       !form.timing
     ) {
-      alert("All fields are required");
+      toast.warn("All fields are required");
       return;
     }
 
@@ -35,7 +37,7 @@ const ExamHeadCreateExam = () => {
 
     try {
       await createExam(form);
-      alert("Exam created successfully");
+      toast.success("Exam created successfully");
 
       setForm({
         title: "",
@@ -45,7 +47,7 @@ const ExamHeadCreateExam = () => {
         timing: "",
       });
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to create exam");
+      toast.error(err.response?.data?.message || "Failed to create exam");
     } finally {
       setLoading(false);
     }

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../components/DashboardLayout";
 import SearchableDropdown from "../../components/SearchableDropdown";
 import { getLinkedStudents, addOrUpdateGrades } from "../../api/examHead.api";
+import { toast } from "react-toastify";
+
 
 const ExamHeadManageGrades = () => {
   const [students, setStudents] = useState([]);
@@ -44,14 +46,13 @@ const ExamHeadManageGrades = () => {
         subjects: validSubjects,
       });
 
-      alert("Grades updated successfully");
+      toast.success("Grades updated successfully");
       setSelectedStudent("");
       setSemester("");
       setSgpa("");
       setSubjects([{ name: "", grade: "", credits: "" }]);
     } catch (err) {
-      console.error("Failed to update grades");
-      alert("Failed to update grades");
+      toast.error(err.response?.data?.message || "Failed to update grades");
     }
   };
 
